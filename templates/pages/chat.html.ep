@@ -1,0 +1,21 @@
+			<script type="text/javascript" src="/scripts/websocks.js"></script>
+ 			<div id="pageName">
+				<h2><%= $title %></h2>
+			</div>
+			<div id="infoBar">
+				<span><label for="name">Username:</label><input id="name" name="name" placeholder="Rich Littlebot" maxlength="16"/></span>
+				<span class="right"><label for="notificationSounds">Notification Sounds:</label><input id="notificationSounds" name="muteNotifications" type="checkbox" checked="checked"></input></span>
+				<a href="javascript:history.go(0)" id="disconnectOverlay" style="display: none;">You have been disconnected. Click to refresh.</a>
+			</div>
+			<div id="chatLog">
+			</div>
+			<div id="sendBar">
+				<input id="outgoing" placeholder="Beep Boop." maxlength="256" type="text" />
+				<button id="sendButton" alt="Send Message" onclick="sendMessage(document.getElementById('outgoing').value)">Send</button>
+			</div>
+			
+			<audio id="notificationTone" preload="auto">
+				<source src="/sounds/new_message.ogg" type="audio/ogg">
+ 				 <source src="/sounds/new_message.mp3" type="audio/mpeg">
+				This browser doesn not support notification tones, sorry.
+			</audio>

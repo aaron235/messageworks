@@ -1,0 +1,24 @@
+			<script src="scripts/new.js"></script>
+			
+			<h2>Room Type:</h2>
+			<form method="POST" action="/create" id="optionsList">
+				<div id="private">
+					<input id="privateRadio" type="radio" name="private" checked="checked" value=1 ></input>
+					<label for="privateRadio">Private</label>
+				</div>
+				<div id="public">
+					<input id="publicRadio" type="radio" name="private" value=0 ></input>
+						<!-- to-do: put a room URL input and a password input in here -->
+					<label for="publicRadio">Public</label>
+					<div id="roomURL">
+						<input id="roomURLInput" name="roomURLInput" maxlength="32" placeholder="room_name"></input>
+						<span id="URLInputError"></span>
+					</div>
+				</div>
+				
+				<input id="createRoom" type="submit" value="Create"></input>
+			</form>
+<!--JS Todo:
+	• http://stackoverflow.com/questions/895659/how-do-i-block-or-restrict-special-characters-from-input-fields-with-jquery [Prevent anything but alphanumeric, underscore, prevent initial number]
+	• Query perl if custom "public" name is already in use; if it is, animate-in #inUseError, and don't animate-out or let the form be submitted until a valid name's chosen;
+-->

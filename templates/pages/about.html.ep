@@ -1,0 +1,55 @@
+			<p>Hello there! </p>
+			<p>This is (will be) MessageWorks. Our goal is to create an ultra-secure, high anonymity disposable chat service using wss and https, in Perl.</p>
+			<hr />
+			<h2>Feature Ideas:</h2>
+			<ol>
+				<li><strong>Normal:</strong></li>
+				<li>"Room already exists" error page should be replaced with a redirect to that room.</li>
+				<li>Show number of users connected in chat room page</li>
+				<li>New homepage</li>
+				<li>Auto-clean collections and rooms that have no users.</li>
+				<li><strong>Difficult:</strong></li>
+				<li>"Browse rooms" page in menubar to browse open rooms</li>
+				<li>Generate a span after images to collapse the image back into a URL, or reopen it.</li>
+				<li>Send most recent 128 messages to newly-connected users</li>
+				<li>Keep logs capped to most recent 128 messages or so</li>
+			</ol>
+			<hr />
+			<h2>Features Added:</h2>
+			<ol>
+				<li>It's functional! (8/7)</li>
+				<li>The enter key now sends messages (8/7)</li>
+				<li>Chat log is now a little bit prettier (8/7)</li>
+				<li>Name support added via a very simple JSON add-on (8/8)</li>
+				<li>HTML is now escaped before it is stuck into the chat log (BIG deal) (8/8)</li>
+				<li>The Perl is all formatted, legible, and commented (8/8)</li>
+				<li>Added better message formatting and a timestamp (8/8)</li>
+				<li>#chatLog now automatically scrolls to the bottom on a new message (8/13)</li>
+				<li>Made users an object instead of just going by the JSON info (also a big deal) (8/13)</li>
+				<li>Added a random string for each unique user for each connection (8/14)</li>
+				<li>Bold and italic formatting (8/19)</li>
+				<li>Show image [jpg, png, gif] links inline (8/19)</li>
+				<li>Auto-hyperlinking (8/19)</li>
+				<li>Custom favicon (8/20)</li>
+				<li>Color-code user IDs and nicks with hsl($random(0-360),100%, 50%) (8/20)</li>
+				<li>Fix server timeout [used to time out after a minute or so] (8/20)</li>
+				<li>"User Disconnected" message on user disconnect (8/20)</li>
+				<li>"Disconnected from server" message on server restart (8/22)</li>
+				<li>Colors are now generated from random ids on the client's side, and don't need to be stored. (8/22)</li>
+				<li>System Time & Simple Timestrings (8/22)</li>
+				<li>New Room page exists (8/25)</li>
+				<li>New Room page allows generation of room objects, database collections (8/26)</li>
+				<li>Store messages in a database instead of a plaintext file (8/30)</li>
+				<li>"User connected" messages (8/30)</li>
+				<li>New Room creation (8/30)
+					<ul>
+						<li>User clicks "New Room" link</li>
+						<li>New tab opens at messageworks.com/[longrandomstring], maybe in gfycat's word format even :D</li>
+						<li>Info panel above chatbox [upper right] shows users connected, link to share</li>
+						<li>After all users disconnect, the room shuts down</li>
+					</ul>
+				</li>
+				<li>Message notification sounds (8/30)</li>
+				<li>Up/Down to flip through previous inputs (8/30)</li>
+				<li>Show chat room title in chat room page (8/30)</li>
+			</ol>

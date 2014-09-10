@@ -1,0 +1,5 @@
+<div class="errorPage">
+	<h2>Room not Found</h2>
+	<p>The room you requested doesn't exist.</p>
+	<a href="/new">Try making a new one.</a>
+</div>
