@@ -1,3 +1,3 @@
 #!/bin/bash
-mongod --dbpath $HOME/server/db --smallfiles --logpath $HOME/server/log/mongod.log;
-morbo -l http://*:8080 -v $HOME/server/server.pl;
+mongod --dbpath db --smallfiles --logpath log/mongodb.log;
+morbo -v server.pl;
