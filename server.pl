@@ -69,7 +69,7 @@ get '/' => sub {
 	my $controller = shift;
 	##	simply render "templates/index.html.ep"
 	$controller->stash(
-		page => $controller->render_to_string( 'pages/chat' ),
+		page => $controller->render_to_string( 'pages/home' ),
 		title => "Home",
 	);
 	$controller->render( 'frame' );
@@ -218,7 +218,8 @@ websocket '/chat/:roomName/send' => sub {
 	
 		$room->serverMessage("Client " . $user->{randString} . " has disconnected.");
 		
-		if ( defined($room->{clients}) ) {
+		## If the room is empty, delete the room.
+		if ( !keys $room->{clients} ) {
 			delete( $rooms{$roomName} );
 			$room->remove;
 		};

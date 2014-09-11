@@ -1,6 +1,6 @@
 //	'ws' is a new WebSocket object with the server IP/URL hard coded
 var pathArray = window.location.pathname.split( '/' );
-var ws = new WebSocket( 'ws://perlbox-mach3-135866.usw1.nitrousbox.com:4000/chat/' + pathArray[2] + '/send/' ); //< %= url_for('send')->to_abs %> for when this moves to /templates
+var ws = new WebSocket( 'ws://' + window.location.host + '/chat/' + pathArray[2] + '/send/' );
 
 var isActive = true;
 

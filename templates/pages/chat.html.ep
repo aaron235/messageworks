@@ -11,7 +11,7 @@
 			</div>
 			<div id="sendBar">
 				<input id="outgoing" placeholder="Beep Boop." maxlength="256" type="text" />
-				<button id="sendButton" alt="Send Message" onclick="sendMessage(document.getElementById('outgoing').value)">Send</button>
+				<button id="sendButton" alt="Send Message" onclick="websockSend(document.getElementById('outgoing').value)">Send</button>
 			</div>
 			
 			<audio id="notificationTone" preload="auto">
