@@ -224,7 +224,7 @@ websocket '/chat/:roomName/send' => sub {
 			$room->remove;
 		};
 	});
-};
+}; 
 
 
 ######  FUNCTIONS  ######
