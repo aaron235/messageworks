@@ -1,5 +1,5 @@
 <div class="errorPage">
-	<h2>Room not Found</h2>
+	<h2>Room Already Exists</h2>
 	<p>The room you requested already exists.</p>
 	<a href="/new">Try making another.</a>
 </div>
