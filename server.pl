@@ -112,7 +112,7 @@ post '/create' => sub {
 		$controller->redirect_to( '/new' );
 		return;
 	} else {
-		my $newRoom = addRoom($requestedURL);
+		my $newRoom = addRoom($controller, $requestedURL);
 		$controller->redirect_to( 'chat/' . $newRoom->{id} );
 	};
 	
@@ -131,10 +131,12 @@ post '/create' => sub {
 	};
 	
 	sub addRoom {
+		my $controller = shift;
 		my $roomName = shift;
 		##	Stop if the room already exists (to be replaced with an error template)
 		if ( $roomName ~~ %rooms ) {
-			die ( "Room $roomName already exists, stopped");
+			$controller->redirect_to( 'error/roomAlreadyExists' );
+			last;
 		};
 		##	Create a new room with the following attributes
 		my $room = Rooms->new(
@@ -169,13 +171,33 @@ get '/chat/:roomName' => sub {
 		
 		$controller->render( 'frame' );
 	} else {
-		$controller->stash(
-			page => $controller->render_to_string( 'errors/roomNotFound' ),
-			title => "Room Not Found",
-		);
-		
-		$controller->render( 'frame' );
+		$controller->redirect_to( 'error/roomNotFound' );
 	};
+};
+
+get '/error/:error' => sub {
+	my $controller = shift;
+	my $error = $controller->stash( 'error' );
+	
+	my $title;
+	SWITCH: {
+		$error eq "roomNotFound" && do {
+			$title = "Room Not Found";
+			last SWITCH;
+		};
+		$error eq "roomAlreadyExists" && do {
+			$title = "Room Already Exists";
+			last SWITCH;
+		};
+		$title = "Unknown Error";
+	}
+	
+	$controller->stash (
+		page => $controller->render_to_string( 'errors/' . $error ),
+		title => "Error: " . $title,
+	);
+	
+	$controller->render( 'frame' );
 };
 
 websocket '/chat/:roomName/send' => sub {
@@ -219,8 +241,7 @@ websocket '/chat/:roomName/send' => sub {
 		$room->serverMessage("Client " . $user->{randString} . " has disconnected.");
 		
 		## If the room is empty, delete the room.
-		if ( !keys $room->{clients}
-		|| 	$roomName ne "default" ) {
+		if ( !keys $room->{clients} || $roomName ne "default" ) {
 			delete( $rooms{$roomName} );
 			$room->remove;
 		};
