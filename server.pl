@@ -171,7 +171,7 @@ get '/chat/:roomName' => sub {
 		
 		$controller->render( 'frame' );
 	} else {
-		$controller->redirect_to( 'error/roomNotFound' );
+		$controller->redirect_to( '/error/roomNotFound' );
 	};
 };
 
