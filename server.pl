@@ -135,7 +135,7 @@ post '/create' => sub {
 		my $roomName = shift;
 		##	Stop if the room already exists (to be replaced with an error template)
 		if ( $roomName ~~ %rooms ) {
-			$controller->redirect_to( 'error/roomAlreadyExists' );
+			$controller->redirect_to( 'error/room_already_exists' );
 			last;
 		};
 		##	Create a new room with the following attributes
@@ -171,7 +171,7 @@ get '/chat/:roomName' => sub {
 		
 		$controller->render( 'frame' );
 	} else {
-		$controller->redirect_to( '/error/roomNotFound' );
+		$controller->redirect_to( '/error/room_not_found' );
 	};
 };
 
@@ -179,18 +179,22 @@ get '/error/:error' => sub {
 	my $controller = shift;
 	my $error = $controller->stash( 'error' );
 	
-	my $title;
-	SWITCH: {
-		$error eq "roomNotFound" && do {
-			$title = "Room Not Found";
-			last SWITCH;
-		};
-		$error eq "roomAlreadyExists" && do {
-			$title = "Room Already Exists";
-			last SWITCH;
-		};
-		$title = "Unknown Error";
-	}
+	my $title = join ( " ", split( "_", $error) );
+	
+	$title =~ s/(\w+)/\u\L$1/g;
+	
+##	my $title;
+##	SWITCH: {
+##		$error eq "roomNotFound" && do {
+##			$title = "Room Not Found";
+##			last SWITCH;
+##		};
+##		$error eq "roomAlreadyExists" && do {
+##			$title = "Room Already Exists";
+##			last SWITCH;
+##		};
+##		$title = "Unknown Error";
+##	}
 	
 	$controller->stash (
 		page => $controller->render_to_string( 'errors/' . $error ),
