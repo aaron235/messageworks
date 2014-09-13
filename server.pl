@@ -245,7 +245,7 @@ websocket '/chat/:roomName/send' => sub {
 		$room->serverMessage("Client " . $user->{randString} . " has disconnected.");
 		
 		## If the room is empty, delete the room.
-		if ( !keys $room->{clients} || $roomName ne "default" ) {
+		if ( !keys $room->{clients} && $roomName ne "default" ) {
 			delete( $rooms{$roomName} );
 			$room->remove;
 		};
