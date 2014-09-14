@@ -47,8 +47,6 @@ sub new {
 	
 	my $self = {
 		randString	=> $randString,
-		controller	=> undef,
-		database	=> undef,
 		%options,
 	};
 	
