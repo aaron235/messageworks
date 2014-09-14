@@ -125,12 +125,31 @@ sub serverMessage {
 	$self->deliverMessage($hashOut);
 };
 
+sub sendUserList {
+	my $self = shift;
+	
+	my @users;
+	
+	for ( keys $self->{clients} ) {
+		push( @users, $_ );
+	};
+	
+	my $hashOut = {
+		users => @users,
+	};
+	
+	for ( values $self->{clients} ) {
+		$_->{controller}->tx->send( {json => $hashOut} );
+	};
+};
+
 sub addUser {
 	my $self = shift;
 	my $user = shift;
 	
 	my $userID = $user->{randString};
 	$self->{clients}->{$userID} = $user;
+	$self->sendUserList;
 };
 
 sub removeUser {
@@ -139,6 +158,7 @@ sub removeUser {
 	
 	my $userID = $user->{randString};
 	delete $self->{clients}->{$userID};
+	$self->sendUserList;
 };
 
 sub remove {
