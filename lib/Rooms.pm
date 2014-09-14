@@ -136,6 +136,7 @@ sub sendUserList {
 	
 	my $hashOut = {
 		users => @users,
+		type  => "userList",
 	};
 	
 	for ( values $self->{clients} ) {
