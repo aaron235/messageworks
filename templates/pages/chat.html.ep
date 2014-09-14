@@ -17,5 +17,5 @@
 			<audio id="notificationTone" preload="auto">
 				<source src="/sounds/new_message.ogg" type="audio/ogg">
  				<source src="/sounds/new_message.mp3" type="audio/mpeg">
-				This browser doesn not support notification tones, sorry.
+				This browser does not support HTML5 notification tones, sorry.
 			</audio>
