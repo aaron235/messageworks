@@ -1,8 +1,8 @@
 			<h1>MessageWorks</h1>
 			<p>Welcome. This is a work-in-progress disposable chat service webapp.</p>
 			<p>Getting started is easy, you don't need an account.</p>
-			<p>You can join us over at the <a href="http://www.messageworks.com/chat/default/">default chat room</a>, or
-			you can make your own chat at our <a href="http://www.messageworks.com/new">new room creator</a>.</p>
+			<p>You can join us over at the <a href="/chat/default/">default chat room</a>, or
+			you can make your own chat at our <a href="/new">new room creator</a>.</p>
 			
-			<p>Make sure to spread the word, and donate in our <a href="http://www.messageworks.com/about">about section</a>
+			<p>Make sure to spread the word, and donate in our <a href="/about">about section</a>
 			if you have any to spare! We're college kids who do this for free.</p>
