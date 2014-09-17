@@ -85,39 +85,6 @@ ws.onmessage = function ( event ) {
 		break;
 	};
 	
-	/*
-	if ( JSON.parse(event.data ).type == "server" ) {
-		$( '#chatLog' ).append([
-			'<div class="message">',
-				'<span class="server name">[Server]: </span>' +
-				'<span class="server text">' + JSON.parse(event.data).text + '</span>' ,
-			'</div>',
-		].join( "\n" ));
-	} else if ( JSON.parse(event.data).type == "user" ) {
-		if ( JSON.parse(event.data).name === "" ) {
-			$( '#chatLog' ).append([
-			'<div class="message">',
-				'<span class="rand" '+ 'style="color:' + colorString + ';">' + JSON.parse(event.data).rand + '</span>' +
-				'<span class="name" '+ 'style="color:' + colorString + ';">' + '' + '</span>' +
-				'<span class="text">' + JSON.parse(event.data).text + '</span>' +
-				'<span class="time">' + localTimeString + '</span>',
-			'</div>',
-		].join( "\n" ));
-		} else {
-			$( '#chatLog' ).append([
-				'<div class="message">',
-					'<span class="rand" '+ 'style="color:' + colorString + ';">'  + JSON.parse(event.data).rand + '</span>' +
-					'<span class="name" '+ 'style="color:' + colorString + ';">'  + '[' + JSON.parse(event.data).name + ']:&nbsp;' + '</span>' +
-					'<span class="text">' + JSON.parse(event.data).text + '</span>' +
-					'<span class="time">' + localTimeString + '</span>',
-				'</div>',
-			].join( "\n" ));	//	neat little trick to make the hard coded html legible (maybe make this an object for a speed boost (and good practice :D )?)
-		}
-	} else if ( JSON.parse( event.data ).type == "keepalive" ) {
-		
-	};
-	*/
-	
 	
 	//	this makes #chatLog scroll to the bottom after each new message
 	$( '#chatLog' ).scrollTop( $( '#chatLog' )[0].scrollHeight );
