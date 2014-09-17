@@ -113,7 +113,7 @@ sub removeUser {
 	
 	my $userID = $user->{randString};
 	delete $self->{clients}->{$userID};
-	$self->sendUserList;
+##	$self->sendUserList;
 };
 
 sub remove {
