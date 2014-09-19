@@ -14,12 +14,15 @@ sub prepareText {
 sub htmlEscape {
 	my $string = shift;
 	
-	$string =~ s/&/&amp;/g;
-	$string =~ s/</&lt;/g;
-	$string =~ s/>/&gt;/g;
-	$string =~ s/'/&#39;/g;
-	$string =~ s/"/&quot;/g;
-	
+	unless( $string ) {
+		return( "" );
+	} else {
+		$string =~ s/&/&amp;/g;
+		$string =~ s/</&lt;/g;
+		$string =~ s/>/&gt;/g;
+		$string =~ s/'/&#39;/g;
+		$string =~ s/"/&quot;/g;
+	}
 	return $string;
 };
 

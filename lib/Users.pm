@@ -63,7 +63,7 @@ sub signMessage {
 	
 	my $hashOut = {
 		rand => $self->{randString},
-		name => $hashIn->{name},
+		name => $self->{name},
 		text => $hashIn->{text},
 		time => $timeString,
 		type => "user",

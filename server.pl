@@ -25,6 +25,7 @@ use DateTime;
 
 require 'lib/Users.pm';
 require 'lib/Rooms.pm';
+#require 'lib/Parsing.pm';
 
 ##	This is our connection to mongo
 my $mongoClient = MongoDB::MongoClient->new;
@@ -183,19 +184,6 @@ get '/error/:error' => sub {
 	
 	$title =~ s/(\w+)/\u\L$1/g;
 	
-##	my $title;
-##	SWITCH: {
-##		$error eq "roomNotFound" && do {
-##			$title = "Room Not Found";
-##			last SWITCH;
-##		};
-##		$error eq "roomAlreadyExists" && do {
-##			$title = "Room Already Exists";
-##			last SWITCH;
-##		};
-##		$title = "Unknown Error";
-##	}
-	
 	$controller->stash (
 		page => $controller->render_to_string( 'errors/' . $error ),
 		title => "Error: " . $title,
@@ -221,15 +209,40 @@ websocket '/chat/:roomName/send' => sub {
 	##	set the timeout for each websocket connection to indefinite
 	$user->{controller}->inactivity_timeout( 0 );
 	
+	sub htmlEscape {
+		my $string = shift;
+	
+		unless( $string ) {
+			return( "" );
+		} else {
+			$string =~ s/&/&amp;/g;
+			$string =~ s/</&lt;/g;
+			$string =~ s/>/&gt;/g;
+			$string =~ s/'/&#39;/g;
+			$string =~ s/"/&quot;/g;
+		}
+		return $string;
+	};
+
 	$user->{controller}->on( json => sub {
 		my ($controller, $hashIn) = @_;
-		if ( $hashIn->{display} ) {
-
-			my $hash = $user->signMessage( $hashIn );
-			$hash = $room->prepareMessage( $hash );
-			$room->deliverMessage( $hash );
-		} else {
-			
+		
+		given( $hashIn->{type} ) {
+			when( "message" ) {
+				my $hash = $user->signMessage( $hashIn );
+				$hash = $room->prepareMessage( $hash );
+				$room->deliverMessage( $hash );
+			}
+			when ( "name" ) {
+				$user->{name} = htmlEscape($hashIn->{name});
+				print("$user->{randString} changed their name to $user->{name}\n");
+			} 
+			when ( "keepalive" ) {
+				
+			} 
+			default {
+				
+			}
 		};
 	});
 
@@ -237,7 +250,6 @@ websocket '/chat/:roomName/send' => sub {
 	$user->{controller}->on( finish => sub {
 		##Write it down in the log, console, and room chat
 		app->log->debug( "Client disconnected" );
-		print( "Client disconnected.\n" );
 		
 		#Remove the user
 		$rooms{$roomName}->removeUser($user);

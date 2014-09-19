@@ -2,6 +2,13 @@
 var pathArray = window.location.pathname.split( '/' );
 var ws = new WebSocket( 'ws://' + window.location.host + '/chat/' + pathArray[2] + '/send/' );
 
+ws.onopen = function() {
+	ws.send( JSON.stringify({
+		type: "name",
+		name: $( '#name' ).val(),
+	}));
+};
+
 //	Starts off as the active window
 var isActive = true;
 
@@ -108,7 +115,7 @@ function websockSend(message) {
 		name: $( '#name' ).val(),
 		text: message,
 		time: date.toString(),
-		display: 1,
+		type: "message",
 	}));
 	sentMessages.unshift( $( '#outgoing' ).val() );
 	
@@ -153,6 +160,20 @@ $( document ).ready(function() {
 		}
 	});
 	
+	//	Run once on load
+//	ws.send( JSON.stringify({
+//		type: "name",
+//		name: $( '#name' ).val(),
+//	}));
+	
+	//	Then run again every time #name changes
+	$( '#name' ).change( function() {
+		ws.send( JSON.stringify({
+			type: "name",
+			name: $( '#name' ).val(),
+		}));
+	});
+	
 	//	Check if the server is alive every second (all clientside)
 	var serverStatusCheck = setInterval( function() {
 		if ( ws.readyState === undefined || ws.readyState > 1 ) {
@@ -165,7 +186,7 @@ $( document ).ready(function() {
 	//	Ping the server to keep your WS alive every 20 seconds
 	var keepalivePing = setInterval( function() {
 		ws.send(JSON.stringify({
-			display: 0,
+			type: "keepalive",
 		}));
 	}, 20000 );
-})
+});
