@@ -47,7 +47,7 @@ foreach ( $roomsDB->collection_names ) {
 };
 
 for ( keys %rooms ) {
-	print("Room '$_' initialized.\n");
+	debugLog("Room '$_' initialized.");
 };
 
 =head2 Controllers
@@ -109,7 +109,7 @@ post '/create' => sub {
 	};
 	
 	if (!($requestedURL =~ m/[a-zA-Z][\w]{0,31}/ )) {
-		print("Regex failed, invalid name\n");
+		debugLog("Regex failed, invalid name\n");
 		$controller->redirect_to( '/new' );
 		return;
 	} else {
@@ -147,7 +147,7 @@ post '/create' => sub {
 		##	Adds this room to the global hash of all open rooms
 		$rooms{$roomName} = $room;
 		
-		print( "Room '$room->{id}' created.\n");
+		debugLog( "Room '$room->{id}' created.\n");
 		
 		$room->{collection}->insert({ hello => "world" });
 		
@@ -235,7 +235,7 @@ websocket '/chat/:roomName/send' => sub {
 			}
 			when ( "name" ) {
 				$user->{name} = htmlEscape($hashIn->{name});
-				print("$user->{randString} changed their name to $user->{name}\n");
+				debugLog("$user->{randString} changed their name to $user->{name}\n");
 			} 
 			when ( "keepalive" ) {
 				
@@ -269,7 +269,7 @@ websocket '/chat/:roomName/send' => sub {
 
 
 ##	A quick function to print all arguments given to it if $debug is 1
-sub debugLog {
+sub debugPrint {
 	if ( $debugMode ) {
 		foreach ( @_ ) {
 			print( "$_" );
@@ -278,5 +278,12 @@ sub debugLog {
 	};
 }
 
+sub debugLog {
+	if ( $debugMode ) {
+		foreach ( @_ ) {
+			app->log->debug( "$_" );
+		};
+	};
+}
 
 app->start;
