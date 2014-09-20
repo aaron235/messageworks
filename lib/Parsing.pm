@@ -35,6 +35,7 @@ sub formattingCheck {
 	return $string;
 };
 
+#Automatically Identify links
 sub autoLinker {
 	my $string = shift;
 		
@@ -50,7 +51,15 @@ sub autoLinker {
 		((https?:\/\/)?(www\.)?([^\.\/'"]+\.)+([^\./'"])+\/[^\s]+\.(gif|jpg|jpeg|jpe|png|webp|apng))
 		(")(\ )?((title="")?>)[^<]+(</a>)
 		!<a\ target="_blank"\ href="$2"><img\ src="$2"\ /></a>!gix;
-			
+	#Finds <a> links where href points to a youtube, replaces them with a youtube embed
+	$string =~ 
+		s!
+		(?:<a\ target="_blank"\ href=")
+		(?:(?:https?\:\/\/)?(?:www\.)?(?:(?:youtube.com\/watch\?v=)|(?:youtu.be/)))
+		(([a-zA-Z0-9-]){4,16}(\?t=[0-9]+m?[0-9]+s?)?(\#t\=[0-9]+)?)
+		([^(\s)]+)?
+		(?:(")(\ )?((title="")?>)[^<]+(</a>)) #$3, link closing
+		!<div\ class="chatEmbed"><iframe\ width="560"\ height="315"\ src="//www.youtube.com/embed/$1"\ frameborder="0"\ allowfullscreen></iframe></div>!gix;		
 	return $string;
 };
 
