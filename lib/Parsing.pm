@@ -49,7 +49,7 @@ sub autoLinker {
 		(<a\ href=")
 		((https?:\/\/)?(www\.)?([^\.\/'"]+\.)+([^\./'"])+\/[^\s]+\.(gif|jpg|jpeg|jpe|png|webp|apng))
 		(")(\ )?((title="")?>)[^<]+(</a>)
-		!<a\ href="$2"><img\ src="$2"\ /></a>!gix;
+		!<a\ target="_blank" href="$2"><img\ src="$2"\ /></a>!gix;
 			
 	return $string;
 };
