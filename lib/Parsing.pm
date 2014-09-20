@@ -42,14 +42,14 @@ sub autoLinker {
 	$string =~ 
 		s!
 		((https?://)(www\.)?([^\.\s'"<>]+?\.)+[^\.\s'"<>]+(/\S+)?[^\s'"<>]+)
-		!<a\ href="$1">$1</a>!gix;
+		!<a\ target="_blank" href="$1">$1</a>!gix;
 	#Finds <a> links where href points to an image, replaces them with an <a><img /></a> setup
 	$string =~ 
 		s!
-		(<a\ href=")
+		(<a\ target="_blank"\ href=")
 		((https?:\/\/)?(www\.)?([^\.\/'"]+\.)+([^\./'"])+\/[^\s]+\.(gif|jpg|jpeg|jpe|png|webp|apng))
 		(")(\ )?((title="")?>)[^<]+(</a>)
-		!<a\ target="_blank" href="$2"><img\ src="$2"\ /></a>!gix;
+		!<a\ target="_blank"\ href="$2"><img\ src="$2"\ /></a>!gix;
 			
 	return $string;
 };
