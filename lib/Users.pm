@@ -16,6 +16,8 @@ use Mojolicious::Lite;
 use DateTime;
 use MongoDB;
 
+do 'lib/Parsing.pl';
+
 =head2 new
 
 =item $user->new();
@@ -69,6 +71,14 @@ sub signMessage {
 		type => "user",
 	};
 	return $hashOut;
+};
+
+sub setName {
+	my $self = shift;
+	my $name = shift;
+	
+	$self->{name} = htmlEscape( $name );
+	print("success\n");
 };
 
 1;

@@ -16,7 +16,7 @@ use Mojolicious::Lite;
 use MongoDB;
 use DateTime;
 
-require 'lib/Parsing.pm';
+do 'lib/Parsing.pl';
 
 ##	This is our connection to mongo
 my $mongoClient = MongoDB::MongoClient->new;
@@ -129,3 +129,5 @@ sub remove {
 }
 
 1;
+
+__END__

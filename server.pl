@@ -25,7 +25,6 @@ use DateTime;
 
 require 'lib/Users.pm';
 require 'lib/Rooms.pm';
-#require 'lib/Parsing.pm';
 
 ##	This is our connection to mongo
 my $mongoClient = MongoDB::MongoClient->new;
@@ -208,21 +207,6 @@ websocket '/chat/:roomName/send' => sub {
 	
 	##	set the timeout for each websocket connection to indefinite
 	$user->{controller}->inactivity_timeout( 0 );
-	
-	sub htmlEscape {
-		my $string = shift;
-	
-		unless( $string ) {
-			return( "" );
-		} else {
-			$string =~ s/&/&amp;/g;
-			$string =~ s/</&lt;/g;
-			$string =~ s/>/&gt;/g;
-			$string =~ s/'/&#39;/g;
-			$string =~ s/"/&quot;/g;
-		}
-		return $string;
-	};
 
 	$user->{controller}->on( json => sub {
 		my ($controller, $hashIn) = @_;
@@ -234,7 +218,7 @@ websocket '/chat/:roomName/send' => sub {
 				$room->deliverMessage( $hash );
 			}
 			when ( "name" ) {
-				$user->{name} = htmlEscape($hashIn->{name});
+				$user->setName( $hashIn->{name} );
 				debugLog("$user->{randString} changed their name to $user->{name}\n");
 			} 
 			when ( "keepalive" ) {
@@ -242,7 +226,7 @@ websocket '/chat/:roomName/send' => sub {
 			} 
 			default {
 				
-			}
+			};
 		};
 	});
 
@@ -287,3 +271,5 @@ sub debugLog {
 }
 
 app->start;
+
+__END__
