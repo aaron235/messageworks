@@ -90,12 +90,15 @@ sub sendUserList {
 	
 	my @users;
 	
-	for ( keys $self->{clients} ) {
-		push( @users, $_ );
+	for ( values $self->{clients} ) {
+		if ( $_->{name} ) {
+			push( @users, "$_->{randString}: [$_->{name}]" );
+		} else {
+			push( @users, "$_->{randString}" );
+		};
 	};
 	
 	my $hashOut = {
-##		users => @users,
 		type  => "userList",
 	};
 	
