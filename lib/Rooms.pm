@@ -36,6 +36,8 @@ sub new {
 	
 	bless( $self, $class );
 	
+	app->log->debug( "Rooms->new: created new room with name $self->{name}" );
+	
 	return( $self );
 };
 
@@ -51,6 +53,8 @@ sub prepareMessage {
 		time => $hashIn->{time},
 		type => "user",
 	};
+	
+	app->log->debug( "Rooms->prepareMessage: message prepared from user $hashOut->{name}" );
 	
 	return( $hashOut );
 };
@@ -77,26 +81,32 @@ sub serverMessage {
 	};
 	
 	$self->deliverMessage($hashOut);
+	
+	app->log->debug( "Rooms->serverMessage: server message sent" );
 };
 
-##sub sendUserList {
-##	my $self = shift;
-##	
-##	my @users;
-##	
-##	for ( keys $self->{clients} ) {
-##		push( @users, $_ );
-##	};
-##	
-##	my $hashOut = {
+sub sendUserList {
+	my $self = shift;
+	
+	my @users;
+	
+	for ( keys $self->{clients} ) {
+		push( @users, $_ );
+	};
+	
+	my $hashOut = {
 ##		users => @users,
-##		type  => "userList",
-##	};
-##	
-##	for ( values $self->{clients} ) {
-##		$_->{controller}->tx->send( {json => $hashOut} );
-##	};
-##};
+		type  => "userList",
+	};
+	
+	$hashOut->{users} = @users;
+	
+	for ( values $self->{clients} ) {
+		$_->{controller}->tx->send( {json => $hashOut} );
+	};
+	
+	app->log->debug( "Rooms->sendUserList: user list sent" );
+};
 
 sub addUser {
 	my $self = shift;
@@ -104,8 +114,10 @@ sub addUser {
 	
 	my $userID = $user->{randString};
 	$self->{clients}->{$userID} = $user;
-##	$self->sendUserList;
-};
+	$self->sendUserList;
+	
+	app->log->debug( "Rooms->addUser: user $user->{randString} added" );
+}; 
 
 sub removeUser {
 	my $self = shift;
@@ -113,7 +125,9 @@ sub removeUser {
 	
 	my $userID = $user->{randString};
 	delete $self->{clients}->{$userID};
-##	$self->sendUserList;
+	$self->sendUserList;
+	
+	app->log->debug( "Rooms->removeUser: user $user->{randString} removed" );
 };
 
 sub remove {
@@ -124,6 +138,8 @@ sub remove {
 	for ( values $self->{clients} ) {
 		undef $_;
 	};
+	
+	app->log->debug( "Rooms->remove: room $self->{name} removed" );
 	
 	undef $self;
 }

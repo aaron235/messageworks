@@ -74,7 +74,7 @@ sub signMessage {
 		type => "user",
 	};
 	
-	app->log->debug( "signMessage: user $self->{randString} has successfully signed their message" );
+	app->log->debug( "Users->signMessage: user $self->{randString} has successfully signed their message" );
 	
 	return $hashOut;
 };
@@ -85,7 +85,7 @@ sub setName {
 	
 	$self->{name} = $name;
 	
-	app->log->debug( "setName: user $self->{randString} has changed their name to $name" );
+	app->log->debug( "Users->setName: user $self->{randString} has changed their name to $name" );
 };
 
 1;
