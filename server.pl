@@ -219,7 +219,7 @@ websocket '/chat/:roomName/send' => sub {
 			}
 			when ( "name" ) {
 				$user->setName( $hashIn->{name} );
-				debugLog("$user->{randString} changed their name to $user->{name}\n");
+				$room->sendUserList;
 			} 
 			when ( "keepalive" ) {
 				
