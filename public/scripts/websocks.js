@@ -82,7 +82,9 @@ ws.onmessage = function ( event ) {
 			};
 		break;
 		case "userList":
-		
+			$( '#nameList' )value(
+				
+			);
 		break;
 		case "keepalive":
 		
