@@ -77,7 +77,7 @@ sub setName {
 	my $self = shift;
 	my $name = shift;
 	
-	$self->{name} = htmlEscape( $name );
+	$self->{name} = $name;
 	print("success\n");
 };
 
