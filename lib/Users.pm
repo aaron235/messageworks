@@ -53,8 +53,11 @@ sub new {
 	};
 	
 	bless( $self, $class );
+	
+	app->log->debug( "Users->new: created new user with randString $self->{randString}" );
+	
 	return( $self );
-}
+};
 
 
 sub signMessage {
@@ -70,6 +73,9 @@ sub signMessage {
 		time => $timeString,
 		type => "user",
 	};
+	
+	app->log->debug->( "signMessage: user $self->{randString} has successfully signed their message" );
+	
 	return $hashOut;
 };
 
@@ -78,7 +84,8 @@ sub setName {
 	my $name = shift;
 	
 	$self->{name} = $name;
-	print("success\n");
+	
+	app->log->debug( "setName: user $self->{randString} has changed their name to $name" );
 };
 
 1;
