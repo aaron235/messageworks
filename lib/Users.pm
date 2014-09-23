@@ -74,7 +74,7 @@ sub signMessage {
 		type => "user",
 	};
 	
-	app->log->debug->( "signMessage: user $self->{randString} has successfully signed their message" );
+	app->log->debug( "signMessage: user $self->{randString} has successfully signed their message" );
 	
 	return $hashOut;
 };
