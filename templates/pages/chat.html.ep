@@ -3,14 +3,14 @@
 				<h2><%= $title %></h2>
 			</div>
 			<div id="infoBar">
-				<span><label for="name">Username:</label><input id="name" name="name" placeholder="Rich Littlebot" maxlength="16"/></span>
+				<span><label for="name">Username:</label><input id="name" name="name" placeholder="Rich Littlebot" maxlength="16" tabindex="1" /></span>
 				<span class="right"><label for="notificationSounds">Notification Sounds:</label><input id="notificationSounds" name="muteNotifications" type="checkbox" checked="checked"></input></span>
 				<a href="javascript:history.go(0)" id="disconnectOverlay" style="display: none;">You have been disconnected. Click to refresh.</a>
 			</div>
 			<div id="chatLog">
 			</div>
 			<div id="sendBar">
-				<input id="outgoing" placeholder="Beep Boop." maxlength="256" type="text" />
+				<input id="outgoing" placeholder="Beep Boop." maxlength="256" tabindex="2" type="text" />
 				<button id="sendButton" alt="Send Message" onclick="websockSend(document.getElementById('outgoing').value)">Send</button>
 			</div>
 			
