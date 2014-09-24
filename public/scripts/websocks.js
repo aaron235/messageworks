@@ -82,13 +82,13 @@ ws.onmessage = function ( event ) {
 			};
 		break;
 		case "userList":
-			$( '#nameList' )value(
+			$( '#nameList' ).val(
 				//	JSON.parse(event.data).users is an array containing all of the names and IDs of users, formatted
 				//	Your job is to put all of these inside of <li>s 
 			);
 		break;
 		case "keepalive":
-		
+			//	do nothing
 		break;
 		default:
 		
