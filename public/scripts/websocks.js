@@ -65,7 +65,7 @@ ws.onmessage = function ( event ) {
 				$( '#chatLog' ).append([
 					'<div class="message">',
 						'<span class="rand" '+ 'style="color:' + colorString + ';">' + JSON.parse(event.data).rand + '</span>' +
-						'<span class="name" '+ 'style="color:' + colorString + ';">' + '' + '</span>' +
+						'<span class="name" '+ 'style="color:' + colorString + ';"></span>' +
 						'<span class="text">' + JSON.parse(event.data).text + '</span>' +
 						'<span class="time">' + localTimeString + '</span>',
 					'</div>',
@@ -143,6 +143,10 @@ function changeMessageIndex(increment) {
 	}
 };
 
+function toggleNameListVisibility(){
+		
+};	
+	
 $( document ).ready(function() {
 	$( '#outgoing' ).keyup( function( e ) {
 		//	run a websockSend on a keypress of Enter (keycode 13)
