@@ -53,6 +53,7 @@ ws.onmessage = function ( event ) {
 				'<div class="message">',
 					'<span class="server name">[Server]: </span>' +
 					'<span class="server text">' + JSON.parse(event.data).text + '</span>' ,
+					'<span class="server time">' + localTimeString + '</span>',
 				'</div>',
 			].join( "\n" ));
 		break;
