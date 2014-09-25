@@ -56,6 +56,11 @@ ws.onmessage = function ( event ) {
 					'<span class="server time">' + localTimeString + '</span>',
 				'</div>',
 			].join( "\n" ));
+			
+			//	Play notification sound
+			if ( !isActive && !!$('#notificationSounds').val() ) {
+				document.getElementById('notificationTone').play();
+			};
 		break;
 		
 		//	User message format
@@ -81,6 +86,11 @@ ws.onmessage = function ( event ) {
 					'</div>',
 				].join( "\n" ));
 			};
+			
+			//	Play notification sound
+			if ( !isActive && !!$('#notificationSounds').val() ) {
+				document.getElementById('notificationTone').play();
+			};
 		break;
 		case "userList":
 			$( '#nameList' ).val(
@@ -99,10 +109,6 @@ ws.onmessage = function ( event ) {
 	
 	//	this makes #chatLog scroll to the bottom after each new message
 	$( '#chatLog' ).scrollTop( $( '#chatLog' )[0].scrollHeight );
-	
-	if ( !isActive && !!$('#notificationSounds').val() ) {
-		document.getElementById('notificationTone').play();
-	};
 };
 
 function websockSend(message) {
