@@ -146,8 +146,6 @@ post '/create' => sub {
 		##	Adds this room to the global hash of all open rooms
 		$rooms{$roomName} = $room;
 		
-		debugLog( "Room '$room->{id}' created.\n");
-		
 		$room->{collection}->insert({ hello => "world" });
 		
 		return $room;

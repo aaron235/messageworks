@@ -36,7 +36,7 @@ sub new {
 	
 	bless( $self, $class );
 	
-	app->log->debug( "Rooms->new: created new room with name $self->{name}" );
+	app->log->debug( "Rooms->new: created new room with name '$self->{id}'" );
 	
 	return( $self );
 };
@@ -54,7 +54,7 @@ sub prepareMessage {
 		type => "user",
 	};
 	
-	app->log->debug( "Rooms->prepareMessage: message prepared from user $hashOut->{name}" );
+	app->log->debug( "Rooms->prepareMessage: message prepared in room '$self->{name}' from user '$hashOut->{rand}'" );
 	
 	return( $hashOut );
 };
@@ -65,6 +65,8 @@ sub deliverMessage {
 	for ( values $self->{clients} ) {
 		$_->{controller}->tx->send( {json => $hashOut} );
 	};
+	
+	app->log->debug( "Rooms->deliverMessage: message delivered in room '$self->{id}' from user '$hashOut->{rand}'" );
 };
 
 sub serverMessage {
@@ -82,7 +84,7 @@ sub serverMessage {
 	
 	$self->deliverMessage($hashOut);
 	
-	app->log->debug( "Rooms->serverMessage: server message sent" );
+	app->log->debug( "Rooms->serverMessage: server message sent from room '$self->{id}'" );
 };
 
 sub sendUserList {
@@ -107,7 +109,7 @@ sub sendUserList {
 		$_->{controller}->tx->send( {json => $hashOut} );
 	};
 	
-	app->log->debug( "Rooms->sendUserList: user list sent" );
+	app->log->debug( "Rooms->sendUserList: user list sent from room '$self->{id}'" );
 };
 
 sub addUser {
@@ -118,7 +120,7 @@ sub addUser {
 	$self->{clients}->{$userID} = $user;
 	$self->sendUserList;
 	
-	app->log->debug( "Rooms->addUser: user $user->{randString} added" );
+	app->log->debug( "Rooms->addUser: user '$user->{randString}' added to room '$self->{id}'" );
 }; 
 
 sub removeUser {
@@ -129,7 +131,7 @@ sub removeUser {
 	delete $self->{clients}->{$userID};
 	$self->sendUserList;
 	
-	app->log->debug( "Rooms->removeUser: user $user->{randString} removed" );
+	app->log->debug( "Rooms->removeUser: user '$user->{randString}' removed from room '$self->{id}'" );
 };
 
 sub remove {
@@ -141,7 +143,7 @@ sub remove {
 		undef $_;
 	};
 	
-	app->log->debug( "Rooms->remove: room $self->{name} removed" );
+	app->log->debug( "Rooms->remove: room '$self->{id}' removed" );
 	
 	undef $self;
 }
