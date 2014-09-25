@@ -140,7 +140,7 @@ Body Area
 	/*font-family: monospace;*/
 	box-sizing:border-box;
 	background:$bg;
-	transition:width 1s ease;
+	/* This should animate, instead it breaks things transition:width 1s ease;*/
 }
 
 .chatLogShrunk {
