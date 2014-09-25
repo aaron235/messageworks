@@ -1,0 +1,47 @@
+@import url("/images/iconfont/style.css");
+	
+div.errorPage:before {
+	font-family:"icomoon";
+	content:"\e602";
+	font-size:14rem;
+	padding-right:6rem;
+	display:block;
+	width:160px;
+	position:absolute;
+	left:0px;
+	top:0rem;
+	border-right:1px solid #F3F3F3;
+	color:#CCCCCC;
+}
+
+div.errorPage {
+	padding-left:18rem;
+	position:relative;
+}
+
+div.errorPage h2 {
+	font-size:4rem;	
+}
+
+div.errorPage>p {
+	font-size:1.5rem;
+}
+
+div.errorPage>a {
+	font-size:1.5rem;
+}
+div.errorPage a {
+	border-bottom: 1px solid #E4EFF8;
+	color:#234472;
+	text-decoration:none;
+}
+
+div.errorPage a:hover {
+	border-color: #B6D0EA;
+}
+
+div.errorPage a:focus {
+	background:#E4EFF8;
+	border-color: #B6D0EA;
+	outline:none;
+}

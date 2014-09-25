@@ -1,0 +1,291 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,700&subset=latin,latin-ext);
+
+@import 'colors';
+
+/* *************
+General Formatting
+************* */
+body {
+	min-width:860px;
+	margin: 0;
+	padding: 0;
+	font-family: "Open Sans", sans-serif;
+	font-size:16px;
+}
+
+hr {
+	border:none;
+	border-bottom:1px solid $lay;
+}
+
+/* *************
+Title Area
+************* */
+
+
+#title {
+	background:$bg;
+	border-bottom:1px solid $lay;
+	color: $fg;
+	position:relative;
+	padding:0px;
+	height:96px;
+}
+/*
+#title * {
+	box-sizing:border-box;
+	border:1px solid rgba(255,0,0,.5);
+}*/
+
+/* ***** Logo ***** */
+
+#title h1 img {
+	margin:0px;
+	margin-right:4px;
+	vertical-align:middle;
+	margin-top:-4px;
+}
+
+#title h1 {
+	font-size:32px;
+	padding-left:64px;
+	top:25%;
+	position:absolute;
+	left:0px;
+	margin:0px;
+	height:50%;
+
+}
+#title .betaSign {
+	font-size:.5em;
+	color:$act;
+	vertical-align:top;
+}
+/* ***** Navigation Bar ***** */
+
+#navbar {
+	top:25%;
+	position:absolute;
+	padding-right:64px;
+	right:0px;
+	height:50%;
+	/*why doesn't it go in the damn title box*/
+	margin:0px;
+}
+
+#navbar li {
+	list-style-type: none;
+	display: inline-block;
+	height:100%;
+	margin:0px;
+	padding:0px;
+	margin-left:32px;
+}
+
+#navbar li a {
+	display:block;
+	padding:8px;
+	padding-right:32px;
+	padding-left:32px;
+	box-sizing:border-box;
+	text-decoration:none;
+	border-bottom: 1px solid $nav;
+	color:$navD;
+}
+
+#navbar li a.selected {
+	font-weight:bold;
+	border-color: $navB;
+}
+
+#navbar li a:hover {
+	border-color: $navH;
+}
+
+#navbar li a:focus {
+	background:$nav;
+	border-color: $navH;
+	outline:none;
+}
+
+/* *************
+Body Area
+************* */
+#mainWrapper {
+	padding-top:16px;
+	width:80%;
+	min-width:768px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+#chatWrap {
+	height: 36em;
+	margin-bottom:16px;
+	box-sizing:border-box;
+	position:relative;
+	width:100%;
+}
+#chatLog {
+	padding:16px;
+	height: 100%;
+	color: $fg;
+	/*background-color:$lay;
+	Trying a solid-$bg background :) */
+	border:1px solid $lay;
+
+	overflow: auto;
+	/*font-family: monospace;*/
+	box-sizing:border-box;
+	background:$bg;
+	transition:width 1s ease;
+}
+
+.chatLogShrunk {
+	width: 85%;
+}
+
+#nameList {
+	position:absolute;
+	right:0px;
+	z-index:-1;
+	height:100%;
+	border:1px solid $lay;
+	border-left:0px;
+	box-sizing:border-box;
+	width:15%;
+	padding:16px;
+}
+
+#nameList ul {
+	list-style-type:none;
+	padding:0px;
+}
+
+#versionText {
+	margin-top:64px;
+}
+
+input {
+	font-size:1em;
+}
+/* ***** Info Bar ***** */
+#infoBar {
+	margin-bottom:16px;	
+	font-weight:bold;
+	height:64px;
+	position:relative;
+}
+
+#infoBar>span {
+	height:100%;
+	padding-top:1em;
+	padding-bottom:1em;
+	box-sizing:border-box;
+	margin:0px;
+}
+
+#infoBar .left {
+	float:left;
+}
+#infoBar .right {
+	float:right;
+}
+
+#infoBar .infoButton {
+	display:inline-block;
+	text-align:center;
+	border-radius:4px;
+	margin-left:1em;
+	padding:1em;
+	min-width:64px;
+	border:1px solid $lay;
+	cursor:pointer;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+#infoBar label {
+	font-weight:bold;
+	margin-right:16px;
+}
+
+#infoBar input {
+	font-weight:bold;
+	background:$lay;
+	border:1px solid $layB;
+	padding:1em;
+	box-sizing:border-box;
+	margin:0px;
+}
+
+#infoBar input:focus {
+	background: $layH;
+	outline: 0;
+}
+
+#infoBar #disconnectOverlay {
+	position:absolute;
+	width:100%;
+	height:100%;
+	bottom:0px;
+	right:0px;
+	z-index:1;
+	background:$act;
+	text-align:center;
+	color:$actD;
+	text-decoration:none;
+	padding:1em;
+	box-sizing:border-box;
+	font-family: "Open Sans";
+	border:1px solid $actB;
+}
+
+/* ***** Send Bar ***** */
+
+#sendBar {
+	position:relative;
+	height:64px;
+}
+
+#sendBar input {
+	width:100%;
+	height:100%;
+	margin-right:128px;
+	background:$lay;
+	border:1px solid $layB;
+	padding-left:1em;
+	box-sizing:border-box;
+	margin:0px;
+}
+
+#sendBar input:focus {
+	background:$layH;
+	outline: 0;
+}
+
+#sendBar button {
+	font-size:1em;
+	font-weight:bold;
+	width:160px;
+	height:64px;
+	position:absolute;
+	right:0px;
+	top:0px;
+	border:0px;
+	padding-right:50px;
+	background-color:$bg;
+	background-image: url('../images/button_send@2x.png'), url('../images/button_send_highlight@2x.png');
+	background-size:160px 64px;
+	box-sizing:border-box;
+	color:$actD;
+}
+
+#sendBar button:focus {
+	outline:none;
+	background-image: url('../images/button_send_highlight@2x.png');
+}

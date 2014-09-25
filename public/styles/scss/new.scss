@@ -1,0 +1,162 @@
+/* ***************
+New Room Form
+*************** */
+
+#optionsList {
+	width:100%;
+	/*border:1px solid rgba(255,0,0,.25);*/
+	position:relative;
+	height:384px;
+}
+
+#optionsList * {
+	box-sizing:border-box;
+	/*outline:1px solid rgba(255,0,0,.25);*/
+	padding:0px;
+	margin:0px;
+}
+
+#optionsList #private,
+#optionsList #public {
+	display:block;
+	height:50%;
+	width:70%;
+	font-size:32px;
+	position:relative;
+	border:none;
+	overflow:hidden;
+}
+
+#optionsList>div>label {
+	display:block;
+	position:absolute;
+	width:100%;
+	height:100%;
+	padding:64px;
+	padding-left:192px;
+	border:1px solid;
+}
+
+#optionsList>#private>label {
+	color:#FFFFFF;
+	background:#666666;
+	border-color:#515151;
+}
+
+#optionsList>#public>label {
+	color:#575757;
+	background:#F3F3F3;
+	border-color:#CCCCCC;
+}
+
+#optionsList input[type="radio"] {
+	height:100%;
+	float:left;
+	width:100%;
+	opacity:0;
+	z-index:50;
+}
+#optionsList>div>label:before {
+	width:128px;
+	height:100%;
+	position:absolute;
+	left:0px;
+	top:0px;
+	display:block;
+	content:"";
+	text-align:center;
+	box-sizing:border-box;
+}
+#optionsList #private input[type="radio"] + label:before {
+	background-image:url('../images/private_icon@2x.png');
+	background-size:64px 64px;
+	background-position:center center;
+	background-repeat:no-repeat;
+}
+#optionsList #private input[type="radio"]:checked + label:before {
+	background-color:#515151;
+	color:#FFF;
+}
+#optionsList #public input[type="radio"] + label:before {
+	background-image:url('../images/public_icon@2x.png');
+	background-size:64px 64px;
+	background-position:center center;
+	background-repeat:no-repeat;
+}
+#optionsList #public input[type="radio"]:checked + label:before {
+	background-color:#CCCCCC;
+	color:#575757;
+}
+
+#optionsList>#private>input[type="radio"]:focus + label:before {
+}
+
+#optionsList>#public>input[type="radio"]:focus + label:before {
+}
+
+
+#optionsList #roomURL,
+#optionsList #URLInputError {
+	display:none;
+}
+
+#optionsList #public input[type="radio"]:checked + label + #roomURL,
+#optionsList #public input[type="radio"]:checked + label + #roomURL #URLInputError {
+	display:block;
+}
+
+#optionsList #roomURL {
+	padding:64px;
+	position:absolute;
+	right:0px;
+	width:50%;
+	text-align:right;
+	font-size:1rem;	
+}
+
+#optionsList #URLInputError {
+	color:#B93A02;
+	text-align:left;
+	font-weight:.8rem;
+}
+
+#optionsList #roomURL label,
+#optionsList #roomURL input {
+	display:inline;
+}
+
+#optionsList #roomURL input {
+	box-shadow:none;
+	outline:none;
+	background:white;
+	border:1px solid #CCCCCC;
+	padding:16px;
+	width:100%;
+}
+
+
+#optionsList #createRoom {
+	font-size:32px;
+	
+	width:30%;	
+	height:100%;
+	position:absolute;
+	top:0px;
+	right:0px;
+	
+	background:#F89922;
+	border:1px solid #EC740E;
+	color:#B93A02;
+	transition:background,border,color ease .5s;
+}
+
+#optionsList #createRoom.inactive {
+	background:#666666;
+	border:1px solid #515151;
+	color:#343434;
+}
+
+#optionsList #createRoom:focus {
+	background:#FCB236;
+	outline:none;
+}
