@@ -26,23 +26,24 @@ window.onblur = function () {
 var sentMessages = [];
 var sentMessagesIndex = -1;
 
+//Function to derive the rand & nick hue from the randString
+function hueCalc( randString ) {
+	var hueNum = 0;
+	if ( randString ) {
+		hueNum = Math.floor( randString.slice( 3, 6 ) * 359/999 );	
+	} 
+	return hueNum;
+}
+function colorStringCalc( randString ) {
+	return 'hsl(' + hueCalc( randString ) + ',60%,40%)';
+}
+
 //	when ws recieves a message, append some html with the contents of the message
 ws.onmessage = function ( event ) {
 	//Date calculation into local time
 	var serverTimeString = JSON.parse(event.data).time + " GMT";
 	var serverTime = new Date(serverTimeString);
 	var localTimeString = serverTime.toLocaleTimeString( );
-	
-	//Function to derive the rand & nick hue from the randString
-	function hueCalc( randString ) {
-		var hueNum = 0;
-		if ( randString ) {
-			hueNum = Math.floor( randString.substr( 3, 5 ) * 359/999 );	
-		} 
-		return hueNum;
-	}
-	//Generate an HSL color from the randstring of this message
-	var colorString = 'hsl(' + hueCalc( JSON.parse( event.data ).rand ) + ',60%,40%)';
 	
 	
 	//	When a message is recieved, check the type of the message, and handle it accordingly
@@ -65,6 +66,9 @@ ws.onmessage = function ( event ) {
 		
 		//	User message format
 		case "user":
+			//Generate an HSL color from the randstring of this message
+			var colorString = colorStringCalc( JSON.parse( event.data ).rand );
+				
 			//	If the user left their name blank:
 			if ( JSON.parse(event.data).name === "" ) {
 				$( '#chatLog' ).append([
@@ -93,10 +97,13 @@ ws.onmessage = function ( event ) {
 			};
 		break;
 		case "userList":
-			$( '#nameList' ).val(
-				//	JSON.parse(event.data).users is an array containing all of the names and IDs of users, formatted
-				//	Your job is to put all of these inside of <li>s 
-			);
+			$( "#nameList>ul").empty();
+			nameArray = JSON.parse(event.data).users.split("\n");
+			$( "#userCounter" ).html(nameArray.length.toString());
+			for (var i = 0; i < nameArray.length; i++) {
+				var colorString = colorStringCalc(nameArray[i]);
+				$( "#nameList>ul").append("<li style='color:" + colorString + "'>" + nameArray[i] + "</li>");
+			}
 		break;
 		case "keepalive":
 			//	do nothing
@@ -150,7 +157,7 @@ function changeMessageIndex(increment) {
 };
 
 function toggleNameListVisibility(){
-		
+	$( "#chatLog" ).toggleClass("chatLogShrunk");	
 };	
 	
 $( document ).ready(function() {
@@ -173,7 +180,9 @@ $( document ).ready(function() {
 				break;
 		}
 	});
-	
+	$( '#toggleNameList' ).click(function() {
+		toggleNameListVisibility();
+	});
 	//	Run once on load
 //	ws.send( JSON.stringify({
 //		type: "name",
