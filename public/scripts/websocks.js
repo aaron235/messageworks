@@ -155,10 +155,6 @@ function changeMessageIndex(increment) {
 		sentMessagesIndex = 0;
 	}
 };
-
-function toggleNameListVisibility(){
-	$( "#chatLog" ).toggleClass("chatLogShrunk");	
-};	
 	
 $( document ).ready(function() {
 	$( '#outgoing' ).keyup( function( e ) {
@@ -181,7 +177,8 @@ $( document ).ready(function() {
 		}
 	});
 	$( '#toggleNameList' ).click(function() {
-		toggleNameListVisibility();
+		$( "#chatLog" ).toggleClass("chatLogShrunk");
+		$( '#toggleNameList' ).toggleClass("active");
 	});
 	//	Run once on load
 //	ws.send( JSON.stringify({

@@ -1,6 +1,8 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,700&subset=latin,latin-ext);
 
 @import 'colors';
+@import 'fonts';
+
 
 /* *************
 General Formatting
@@ -9,7 +11,7 @@ body {
 	min-width:860px;
 	margin: 0;
 	padding: 0;
-	font-family: "Open Sans", sans-serif;
+	font-family: $fontStack;
 	font-size:16px;
 }
 
@@ -168,6 +170,7 @@ Body Area
 
 input {
 	font-size:1em;
+	font-family: $fontStack;
 }
 /* ***** Info Bar ***** */
 #infoBar {
@@ -207,7 +210,19 @@ input {
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+	color:$navD;
+	background:$nav;
+	border-color:$navB;
 }
+#infoBar .infoButton:hover {
+	background:$navH;
+}
+#infoBar .infoButton.active {
+	border-color:$navD;
+	background:$navD;
+	color:$bg;
+}
+
 
 #infoBar label {
 	font-weight:bold;

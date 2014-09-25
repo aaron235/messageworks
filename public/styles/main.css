@@ -146,7 +146,8 @@ Body Area
   margin-top: 64px; }
 
 input {
-  font-size: 1em; }
+  font-size: 1em;
+  font-family: "Open Sans", sans-serif; }
 
 /* ***** Info Bar ***** */
 #infoBar {
@@ -182,7 +183,18 @@ input {
   -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  user-select: none; }
+  user-select: none;
+  color: #234472;
+  background: #e4eff8;
+  border-color: #9dbfdf; }
+
+#infoBar .infoButton:hover {
+  background: #b6d0ea; }
+
+#infoBar .infoButton.active {
+  border-color: #234472;
+  background: #234472;
+  color: white; }
 
 #infoBar label {
   font-weight: bold;
