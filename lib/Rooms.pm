@@ -92,7 +92,7 @@ sub sendUserList {
 	
 	for ( values $self->{clients} ) {
 		if ( $_->{name} ) {
-			push( @users, "$_->{randString}: [$_->{name}]" );
+			push( @users, "$_->{randString} [$_->{name}]" );
 		} else {
 			push( @users, "$_->{randString}" );
 		};
@@ -100,9 +100,8 @@ sub sendUserList {
 	
 	my $hashOut = {
 		type  => "userList",
+		users => join( "\n", @users ),
 	};
-	
-	$hashOut->{users} = @users;
 	
 	for ( values $self->{clients} ) {
 		$_->{controller}->tx->send( {json => $hashOut} );
