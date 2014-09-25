@@ -19,6 +19,7 @@ sub htmlEscape {
 		$string =~ s/>/&gt;/g;
 		$string =~ s/'/&#39;/g;
 		$string =~ s/"/&quot;/g;
+		$sthing =~ s/\\/&#92;/g;
 	}
 	return $string;
 };
