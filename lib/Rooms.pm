@@ -54,7 +54,7 @@ sub prepareMessage {
 		type => "user",
 	};
 	
-	app->log->debug( "Rooms->prepareMessage: message prepared in room '$self->{name}' from user '$hashOut->{rand}'" );
+	app->log->debug( "Rooms->prepareMessage: message prepared in room '$self->{id}' from user '$hashOut->{rand}'" );
 	
 	return( $hashOut );
 };
@@ -68,6 +68,19 @@ sub deliverMessage {
 	
 	app->log->debug( "Rooms->deliverMessage: message delivered in room '$self->{id}' from user '$hashOut->{rand}'" );
 };
+
+sub logMessage {
+	my $self = shift;
+	my $messageHash = shift;
+	
+	$self->{collection}->insert({
+		type => $messageHash->{type},
+		rand => $messageHash->{rand},
+		name => $messageHash->{name},
+		text => $messageHash->{text},
+		time => $messageHash->{time},
+	});
+}
 
 sub serverMessage {
 	my $self = shift;
