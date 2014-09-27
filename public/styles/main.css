@@ -186,10 +186,15 @@ input {
   user-select: none;
   color: #234472;
   background: #e4eff8;
-  border-color: #9dbfdf; }
+  border-color: #9dbfdf;
+  text-decoration: none; }
 
 #infoBar .infoButton:hover {
   background: #b6d0ea; }
+
+#infoBar .infoButton:focus {
+  background: #b6d0ea;
+  outline: none; }
 
 #infoBar .infoButton.active {
   border-color: #234472;

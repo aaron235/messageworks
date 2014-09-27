@@ -213,10 +213,17 @@ input {
 	color:$navD;
 	background:$nav;
 	border-color:$navB;
+	text-decoration:none;
 }
 #infoBar .infoButton:hover {
 	background:$navH;
 }
+
+#infoBar .infoButton:focus {
+	background:$navH;
+	outline:none;
+}
+
 #infoBar .infoButton.active {
 	border-color:$navD;
 	background:$navD;
