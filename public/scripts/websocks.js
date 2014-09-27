@@ -22,10 +22,6 @@ window.onblur = function () {
   isActive = false; 
 }; 
 
-//For up-down picking of previous messages
-var sentMessages = [];
-var sentMessagesIndex = -1;
-
 //Function to derive the rand & nick hue from the randString
 function hueCalc( randString ) {
 	var hueNum = 0;
@@ -97,9 +93,13 @@ ws.onmessage = function ( event ) {
 			};
 		break;
 		case "userList":
+			//	Remove all current entries from the user list.
 			$( "#nameList>ul").empty();
+			//	Split the received JSON into an array of lines. 
 			nameArray = JSON.parse(event.data).users.split("\n");
+			//	Count the number of lines [number of users] and update the user counter to match
 			$( "#userCounter" ).html(nameArray.length.toString());
+			//	Add each line to the names list as an li
 			for (var i = 0; i < nameArray.length; i++) {
 				var colorString = colorStringCalc(nameArray[i]);
 				$( "#nameList>ul").append("<li style='color:" + colorString + "'>" + nameArray[i] + "</li>");
@@ -109,18 +109,18 @@ ws.onmessage = function ( event ) {
 			//	do nothing
 		break;
 		default:
-		
+			//	do nothing
 		break;
 	};
 	
 	
-	//	this makes #chatLog scroll to the bottom after each new message
+	//	this makes #chatLog scroll to the bottom after each new message is received.
 	$( '#chatLog' ).scrollTop( $( '#chatLog' )[0].scrollHeight );
 };
 
 function websockSend(message) {
 	
-	//	If the outgoing message is blank, don't send
+	//	If the outgoing message is blank, don't send anything.
 	if ( message == "" ) {
 		return;
 	};
@@ -134,6 +134,7 @@ function websockSend(message) {
 		time: date.toString(),
 		type: "message",
 	}));
+	// Add the sent message to your message history array so you can access it via arrow keys
 	sentMessages.unshift( $( '#outgoing' ).val() );
 	
 	//	blank the outgoing message field
@@ -144,49 +145,50 @@ function getBacklog() {
 	
 }
 
-//function to change the current message index without going too far in either direction
+//For up-down picking of previous messages
+var sentMessages = [];
+var messageInProgress = [];
+var sentMessagesIndex = -1;
+
+//Function to cycle through message history
 function changeMessageIndex(increment) {
+	sentMessages[sentMessagesIndex] = $( '#outgoing' ).val();
 	sentMessagesIndex += increment;
-	
 	if (sentMessagesIndex >= (sentMessages.length-1)) {
 		sentMessagesIndex = sentMessages.length-1;
 	}
-	if (sentMessagesIndex <= 0) {
-		sentMessagesIndex = 0;
+	if (sentMessagesIndex <= -1) {
+		sentMessagesIndex = -1;
 	}
 };
 	
 $( document ).ready(function() {
 	$( '#outgoing' ).keyup( function( e ) {
-		//	run a websockSend on a keypress of Enter (keycode 13)
+		// Process keystrokes in the chat input box
 		switch (e.which) {
+			//If it's an enter keystroke, send the message and return to the default message index.
 			case 13:
 				websockSend( $( '#outgoing' ).val() );
 				sentMessagesIndex = -1;
 				break;
-			//	So up/down arrows cycle through message history
+			// If it's an up keystroke, try to increase the message index, and show the corresponding message in the chat box.
 			case 38:
 				changeMessageIndex(1);
-				console.log("Current value of sentMessagesIndex is:",sentMessagesIndex);
 				$( '#outgoing' ).val( sentMessages[sentMessagesIndex] );
 				break;
+			// If it's a down keystroke, try to decrease the message index, and show the corresponding message in the chat box.
 			case 40:
 				changeMessageIndex(-1);
 				$( '#outgoing' ).val( sentMessages[sentMessagesIndex] );
 				break;
 		}
 	});
+	// Show/hide the list of users when you click the users counter.
 	$( '#toggleNameList' ).click(function() {
 		$( "#chatLog" ).toggleClass("chatLogShrunk");
 		$( '#toggleNameList' ).toggleClass("active");
 	});
-	//	Run once on load
-//	ws.send( JSON.stringify({
-//		type: "name",
-//		name: $( '#name' ).val(),
-//	}));
-	
-	//	Then run again every time #name changes
+	//	Every time #name changes, send a name message to the server so it can update user lists with the new name.
 	$( '#name' ).change( function() {
 		ws.send( JSON.stringify({
 			type: "name",
