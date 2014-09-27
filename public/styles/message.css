@@ -1,102 +1,88 @@
 @import url(http://fonts.googleapis.com/css?family=Anonymous+Pro:400,700,400italic&subset=latin,latin-ext);
-
 .message {
-	/*font-family: "Anonymous Pro";*/
-	/*Message Line Spacing*/
-	margin-bottom:8px;
-	/*(Layout Stuff)*/
-	min-height:1em;
-	box-sizing:border-box;
-	position: relative;
-}
+  /*font-family: "Anonymous Pro";*/
+  /*Message Line Spacing*/
+  margin-bottom: 8px;
+  /*(Layout Stuff)*/
+  min-height: 1em;
+  box-sizing: border-box;
+  position: relative; }
 
 .message span.server {
-	color:#CCCCCC;
-}
+  color: #CCCCCC; }
 
 .message * {
-	/*(Layout Stuff)*/
-	box-sizing:border-box;
-	/*border:1px solid rgba(255,0,0,.5);*/
-}
+  /*(Layout Stuff)*/
+  box-sizing: border-box;
+  /*border:1px solid rgba(255,0,0,.5);*/ }
 
 .message .rand,
 .message .name {
-	
-	/*(Layout Stuff)*/
-	display:block;
-	float:left;
-	height:100%;
-}
+  /*(Layout Stuff)*/
+  display: block;
+  float: left;
+  height: 100%; }
 
 .message .rand {
-	color:#575757;
-	/*.rand width, must be included in .text padding-left*/
-	width:4em;
-}
+  color: #575757;
+  /*.rand width, must be included in .text padding-left*/
+  width: 4em; }
 
 .message .name {
-	white-space: nowrap;
-	font-weight:bold;
-	text-align:right;
-	/*.name width, must be included in .text padding-left*/
-	min-width:8em;
-	text-wrap:none;
-}
+  white-space: nowrap;
+  font-weight: bold;
+  text-align: right;
+  /*.name width, must be included in .text padding-left*/
+  min-width: 8em;
+  text-wrap: none; }
 
 .message .name:first-child {
-	/*If the rand string span doesn't exist, then the name field gets extra margin to make it line up*/
-	margin-left:3em;
-}
+  /*If the rand string span doesn't exist, then the name field gets extra margin to make it line up*/
+  margin-left: 3em; }
 
 .message .text {
-	/*Sum of .rand width and .name width and 1em extra padding*/
-	padding-left:12em;
-	/*Same as .time width, and 1em extra padding*/
-	padding-right:7em;
-	/*(Layout Stuff)*/
-	width:100%;
-	display:block;
-	white-space: pre-wrap;
-	word-wrap: break-word;
-}
+  /*Sum of .rand width and .name width and 1em extra padding*/
+  padding-left: 12em;
+  /*Same as .time width, and 1em extra padding*/
+  padding-right: 7em;
+  /*(Layout Stuff)*/
+  width: 100%;
+  display: block;
+  white-space: pre-wrap;
+  word-wrap: break-word; }
 
 .message .time {
-	text-align:right;
-	color: gray;
-	/*.time width, must be same as .text padding-left*/
-	width:6em;
-	/*(Layout Stuff)*/
-	position:absolute;
-	top:0px;
-	right:0px;
-	overflow:hidden;
-}
+  text-align: right;
+  color: gray;
+  /*.time width, must be same as .text padding-left*/
+  width: 6em;
+  /*(Layout Stuff)*/
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  height: 100%;
+  overflow: hidden; }
 
 .message img {
-	max-height:256px;
-	width:auto;
-	vertical-align:top;
-}
+  max-height: 256px;
+  width: auto;
+  vertical-align: top; }
 
 .message a {
-	font-weight:bold;
-	color:#234472;
-}
+  font-weight: bold;
+  color: #234472; }
 
 .message a:hover {
-	color: #9DBFDF;
-}
+  color: #9DBFDF; }
 
 .message a:focus {
-	background:#E4EFF8;
-	outline:none;
-}
+  background: #E4EFF8;
+  outline: none; }
 
 .message a:active {
-	background:#B6D0EA;
-}
+  background: #B6D0EA; }
 
 .message a:visited {
-	color:#575757;
-}
+  color: #575757; }
+
+/*# sourceMappingURL=message.css.map */
