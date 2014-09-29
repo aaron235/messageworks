@@ -88,6 +88,29 @@ sub setName {
 	app->log->debug( "Users->setName: user $self->{randString} has changed their name to $name" );
 };
 
+sub newRandString {
+	my $self = shift;
+	
+	my $oldID = $self->{randString};
+	
+	my @upperConsonants = ( "B", "C", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "X", "Y", "Z" );
+	my @lowerVowels = ( "a", "e", "i", "o", "u" );
+	my @lowerConsonants = ( "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z" );
+	
+	my $randString = sprintf(
+		$upperConsonants[ int( rand( @upperConsonants ) ) ] . 
+		$lowerVowels[ int( rand( @lowerVowels ) ) ] . 
+		$lowerConsonants[ int( rand( @lowerConsonants ) ) ] . 
+		int( rand( 10 ) ) . 
+		int( rand( 10 ) ) . 
+		int( rand( 10 ) )
+	);
+	
+	$self->{randString} = $randString;
+	
+	app->log->debug( "Users->newRandString: user $self->{randString} had their ID changed from $oldID" );
+};
+
 1;
 
 __END__

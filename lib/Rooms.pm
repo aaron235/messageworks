@@ -139,6 +139,11 @@ sub addUser {
 	my $user = shift;
 	
 	my $userID = $user->{randString};
+	
+	while ( $userID ~~ $self->{clients} ) {
+		$user->newRandString();
+	};
+	
 	$self->{clients}->{$userID} = $user;
 	$self->sendUserList;
 	
