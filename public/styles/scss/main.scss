@@ -178,14 +178,16 @@ input {
 	font-weight:bold;
 	height:64px;
 	position:relative;
+	overflow:hidden;
 }
 
-#infoBar>span {
-	height:100%;
-	padding-top:1em;
-	padding-bottom:1em;
+#infoBar>span,
+#infoBar>a {
 	box-sizing:border-box;
 	margin:0px;
+	top:0px;
+	height:100%;
+	line-height:64px;
 }
 
 #infoBar .left {
@@ -197,23 +199,27 @@ input {
 
 #infoBar .infoButton {
 	display:inline-block;
+	box-sizing:border-box;
 	text-align:center;
 	border-radius:4px;
+	height:100%;
+	padding-left:2em;
+	padding-right:2em;
 	margin-left:1em;
-	padding:1em;
 	min-width:64px;
-	border:1px solid $lay;
+	
+	border:1px solid $navB;
+	color:$navD;
+	background:$nav;
+	text-decoration:none;
 	cursor:pointer;
+	
+	user-select: none;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
-	user-select: none;
-	color:$navD;
-	background:$nav;
-	border-color:$navB;
-	text-decoration:none;
 }
 #infoBar .infoButton:hover {
 	background:$navH;
@@ -240,9 +246,14 @@ input {
 	font-weight:bold;
 	background:$lay;
 	border:1px solid $layB;
-	padding:1em;
 	box-sizing:border-box;
 	margin:0px;
+}
+
+#infoBar input[type="text"] {
+	display:inline-block;
+	height:100%;
+	padding-left:1em;
 }
 
 #infoBar input:focus {
@@ -257,14 +268,13 @@ input {
 	bottom:0px;
 	right:0px;
 	z-index:1;
-	background:$act;
 	text-align:center;
+	background:$act;
+	border:1px solid $actB;
 	color:$actD;
 	text-decoration:none;
-	padding:1em;
 	box-sizing:border-box;
 	font-family: "Open Sans";
-	border:1px solid $actB;
 }
 
 /* ***** Send Bar ***** */
