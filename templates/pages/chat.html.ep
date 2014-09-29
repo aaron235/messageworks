@@ -1,4 +1,4 @@
-			<script type="text/javascript" src="/scripts/websocks.js"></script>
+			<script type="text/javascript" src="/scripts/chat.js"></script>
  			<div id="pageName">
 				<h2><%= $title %></h2>
 			</div>
