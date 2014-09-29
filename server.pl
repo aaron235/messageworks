@@ -29,18 +29,19 @@ require 'lib/Rooms.pm';
 ##	This is our connection to mongo
 my $mongoClient = MongoDB::MongoClient->new;
 # This is the one database we're using from that client connection
-my $roomsDB = $mongoClient->get_database( 'rooms' );
+my $roomInfoDB = $mongoClient->get_database( 'roomInfo' );
+my $roomLogDB = $mongoClient->get_database( 'roomLog' );
 # This is the test room collection inside the database
-my $defaultRoom = $roomsDB->get_collection( 'default' );
+my $defaultRoom = $roomInfoDB->get_collection( 'default' );
 ##	This creates a list of all pre-existing rooms
 my %rooms;
 
 ##	this loop initializes all of the pre-existing databases
-foreach ( $roomsDB->collection_names ) {
+foreach ( $roomInfoDB->collection_names ) {
 	unless ( $_ eq "system.indexes" ) {
 		$rooms{$_} = Rooms->new(
 			id			=> $_,
-			collection	=> $roomsDB->get_collection( $_ ),
+			collection	=> $roomInfoDB->get_collection( $_ ),
 		);
 	};
 };
@@ -99,7 +100,7 @@ post '/create' => sub {
 	my $controller = shift;
 	
 	## $private is a boolean, $requestedURL only exists if private is 0
-	my $private = $controller->param( 'private' );
+	my $private = int( $controller->param( 'private' ) );
 	my $requestedURL = $controller->param( 'roomURLInput' );
 	##Check if the URL is valid; if it's not, redirect back to /new. This is a failsafe in case the JS filter doesn't work.
 	
@@ -108,11 +109,13 @@ post '/create' => sub {
 	};
 	
 	if (!($requestedURL =~ m/[a-zA-Z][\w]{0,31}/ )) {
-		debugLog("Regex failed, invalid name\n");
+		debugLog( "Regex failed, invalid name\n" );
 		$controller->redirect_to( '/new' );
 		return;
+	} elsif ( $requestedURL ~~ %rooms ) {
+		$controller->redirect_to( 'error/room_already_exists' );
 	} else {
-		my $newRoom = addRoom($controller, $requestedURL);
+		my $newRoom = addRoom( $requestedURL, $private );
 		$controller->redirect_to( 'chat/' . $newRoom->{id} );
 	};
 	
@@ -131,22 +134,15 @@ post '/create' => sub {
 	};
 	
 	sub addRoom {
-		my $controller = shift;
 		my $roomName = shift;
-		##	Stop if the room already exists (to be replaced with an error template)
-		if ( $roomName ~~ %rooms ) {
-			$controller->redirect_to( 'error/room_already_exists' );
-			last;
-		};
-		##	Create a new room with the following attributes
+		my $private = shift;
+		
 		my $room = Rooms->new(
 			id			=> $roomName,
-			collection	=> $roomsDB->get_collection( $roomName ),
+			private		=> $private,
 		);
 		##	Adds this room to the global hash of all open rooms
 		$rooms{$roomName} = $room;
-		
-		$room->{collection}->insert({ hello => "world" });
 		
 		return $room;
 	};
@@ -214,6 +210,7 @@ websocket '/chat/:roomName/send' => sub {
 				my $hash = $user->signMessage( $hashIn );
 				$hash = $room->prepareMessage( $hash );
 				$room->deliverMessage( $hash );
+				$room->logMessage( $hash );
 			}
 			when ( "name" ) {
 				$user->setName( $hashIn->{name} );

@@ -21,7 +21,8 @@ do 'lib/Parsing.pl';
 ##	This is our connection to mongo
 my $mongoClient = MongoDB::MongoClient->new;
 # This is the one database we're using from that client connection
-my $roomsDB = $mongoClient->get_database( 'rooms' );
+my $roomLogDB = $mongoClient->get_database( 'roomLog' );
+my $roomInfoDB = $mongoClient->get_database( 'roomInfo' );
 
 sub new {
 	my ( $class, %options ) = @_;
@@ -32,9 +33,15 @@ sub new {
 	
 	my $collectionName = $self->{id};
 	
-	$self->{collection} = $roomsDB->get_collection( $collectionName );
+	$self->{logCollection} = $roomLogDB->get_collection( $collectionName );
+	$self->{infoCollection} = $roomInfoDB->get_collection( $collectionName );
 	
 	bless( $self, $class );
+	
+	$self->{infoCollection}->insert({
+		name    => $self->{id},
+		private => $self->{private},
+	});
 	
 	app->log->debug( "Rooms->new: created new room with name '$self->{id}'" );
 	
@@ -73,14 +80,14 @@ sub logMessage {
 	my $self = shift;
 	my $messageHash = shift;
 	
-	$self->{collection}->insert({
+	$self->{logCollection}->insert({
 		type => $messageHash->{type},
 		rand => $messageHash->{rand},
 		name => $messageHash->{name},
 		text => $messageHash->{text},
 		time => $messageHash->{time},
 	});
-}
+};
 
 sub serverMessage {
 	my $self = shift;
@@ -150,7 +157,8 @@ sub removeUser {
 sub remove {
 	my $self = shift;
 	
-	$self->{collection}->drop;
+	$self->{logCollection}->drop;
+	$self->{infoCollection}->drop;
 	
 	for ( values $self->{clients} ) {
 		undef $_;
@@ -159,7 +167,7 @@ sub remove {
 	app->log->debug( "Rooms->remove: room '$self->{id}' removed" );
 	
 	undef $self;
-}
+};
 
 1;
 
