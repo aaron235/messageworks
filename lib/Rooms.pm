@@ -87,6 +87,8 @@ sub logMessage {
 		text => $messageHash->{text},
 		time => $messageHash->{time},
 	});
+	
+	app->log->debug( "Rooms->logMessage: message logged in room '$self->{id}' from user '$messageHash->{rand}'" );
 };
 
 sub serverMessage {
