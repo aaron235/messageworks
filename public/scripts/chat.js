@@ -3,10 +3,10 @@ var pathArray = window.location.pathname.split( '/' );
 var ws = new WebSocket( 'ws://' + window.location.host + '/chat/' + pathArray[2] + '/send/' );
 
 ws.onopen = function() {
-	ws.send( JSON.stringify({
-		type: "name",
-		name: $( '#name' ).val(),
-	}));
+	//Send a name packet to the server with the current name.
+	nameUpdate( $( '#name' ).val() );
+	//Send a backlogRequest packet to the server 
+	backlogRequest(128);
 };
 
 //	Starts off as the active window
@@ -21,6 +21,19 @@ window.onfocus = function () {
 window.onblur = function () { 
   isActive = false; 
 }; 
+
+function nameUpdate(name) {
+	ws.send( JSON.stringify({
+		type: "name",
+		name: name,
+	}));
+}
+function backlogRequest(amount) {
+	ws.send( JSON.stringify({
+		type: "backlog",
+		amount: amount,
+	}));
+}
 
 //Function to derive the rand & nick hue from the randString
 function hueCalc( randString ) {
