@@ -1,16 +1,13 @@
 messageworks
 ============
 
-MessageWorks is a secure and lightweight web application used for chatting with complete strangers over the Internet. 
-MessageWorks is suggested to be used on sites like Reddit, Facebook, 4Chan, tumblr, and other sites where users 
-communicate often in a group setting. One of MessageWorks' primary purposes is to supplement these services by adding a 
-non-committal way to chat one-on-one or in a small group with anybody in any of these services. Simply go to the 
-MessageWorks home page, generate a room, and share the link with anyone you would like to speak with separate from the 
-rest of the discussion. No accounts, usernames, or other uniquely identifiable information are or will ever be 
-collected. Logs are also not stored for any longer than the life of the chat room. 
+MessageWorks is a secure and lightweight web application used for chatting with strangers over the internet. 
 
-At the moment, MessageWorks is not secure, but it is convenient, lightweight, and anonymous. This is to be considered 
-an early beta. Hosting at [messageworks](http://www.messageworks.com) is pending, and will arrive before October.
+MessageWorks can be used alongside services like Reddit, Facebook, 4Chan, tumblr, and other social networks. One of MessageWorks' primary purposes is to supplement these services by adding a non-committal way to chat one-on-one or in a small group with anybody from any of these services. 
+
+Simply go to the MessageWorks home page, make a room, and share the link with anyone you would like to invite. No accounts, usernames, or other uniquely identifiable information are or will ever be collected. When the room dies, message history logs are removed as well.
+
+Messageworks is not yet fully secure, but it is convenient, lightweight, and anonymous. The current code base should be considered an early beta.
 
 MessageWorks uses the following Perl modules:
 
