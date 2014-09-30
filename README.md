@@ -7,7 +7,7 @@ MessageWorks can be used alongside services like Reddit, Facebook, 4Chan, tumblr
 
 Simply go to the MessageWorks home page, make a room, and share the link with anyone you would like to invite. No accounts, usernames, or other uniquely identifiable information are or will ever be collected. When the room dies, message history logs are removed as well.
 
-Messageworks is not yet fully secure, but it is convenient, lightweight, and anonymous. The current code base should be considered an early beta.
+MessageWorks is not yet fully secure, but it is convenient, lightweight, and anonymous. The current code base should be considered an early beta.
 
 MessageWorks uses the following Perl modules:
 
