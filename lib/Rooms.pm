@@ -179,7 +179,7 @@ sub sendBacklog {
 			$user->{backlogIndex} = $_;
 		};
 		
-		$_->{type} = "backlog";
+		$_->{backlog} = 1;
 		
 		$user->{controller}->tx->send( {json => $_} );
 	};
