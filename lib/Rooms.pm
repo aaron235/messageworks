@@ -74,24 +74,45 @@ sub deliverMessage {
 		$_->{controller}->tx->send( {json => $hashOut} );
 	};
 	
-	app->log->debug( "Rooms->deliverMessage: message delivered in room '$self->{id}' from user '$hashOut->{rand}'" );
+	$self->logMessage( $hashOut );
+	
+	if ( $hashOut->{type} eq "server" ) {
+		app->log->debug( "Rooms->deliverMessage: message delivered in room '$self->{id}' from server" );
+	} elsif ( $hashOut->{type} eq "user" ) {
+		app->log->debug( "Rooms->deliverMessage: message delivered in room '$self->{id}' from user '$hashOut->{rand}'" );
+	}
 };
 
 sub logMessage {
 	my $self = shift;
 	my $messageHash = shift;
 	
-	$self->{logCollection}->insert({
-		type => $messageHash->{type},
-		rand => $messageHash->{rand},
-		name => $messageHash->{name},
-		text => $messageHash->{text},
-		time => $messageHash->{time},
+	if ( $messageHash->{type} eq "server" ) {
+		$self->{logCollection}->insert({
+			type => $messageHash->{type},
+			name => $messageHash->{name},
+			text => $messageHash->{text},
+			time => $messageHash->{time},
 		
-		logTime => time(),
-	});
+			logTime => time(),
+		});
+	} elsif ( $messageHash->{type} eq "user" ) {
+		$self->{logCollection}->insert({
+			type => $messageHash->{type},
+			rand => $messageHash->{rand},
+			name => $messageHash->{name},
+			text => $messageHash->{text},
+			time => $messageHash->{time},
+		
+			logTime => time(),
+		});
+	}
 	
-	app->log->debug( "Rooms->logMessage: message logged in room '$self->{id}' from user '$messageHash->{rand}'" );
+	if ( $messageHash->{type} eq "server" ) {
+		app->log->debug( "Rooms->logMessage: message logged in room '$self->{id}' from server" );
+	} elsif ( $messageHash->{type} eq "user" ) {
+		app->log->debug( "Rooms->logMessage: message logged in room '$self->{id}' from user '$messageHash->{rand}'" );
+	}
 };
 
 sub serverMessage {
@@ -130,11 +151,38 @@ sub sendUserList {
 		users => join( "\n", @users ),
 	};
 	
-	for ( values $self->{clients} ) {
+	foreach ( values $self->{clients} ) {
 		$_->{controller}->tx->send( {json => $hashOut} );
 	};
 	
 	app->log->debug( "Rooms->sendUserList: user list sent from room '$self->{id}'" );
+};
+
+sub sendBacklog {
+	my $self = shift;
+	my $user = shift;
+	my $amount = shift;
+	
+	my $backlogIndexTime = $user->{backlogIndex}->{logTime};
+	my @messages;
+	
+	##	This line sets @messages to a hash of $amount number of messages before the user entered the room
+		
+	foreach ( $self->{logCollection}->query( { logTime => { '$lte' => $backlogIndexTime } } )->limit( $amount )->all ) {
+		print( $_ );
+		unshift( @messages, $_ );
+	};
+	##	ugh.
+	
+	foreach ( @messages ) {
+		if ( $_->{logTime} == $messages[ -1 ]->{logTime} ) {
+			$user->{backlogIndex} = $_;
+		};
+		
+		$_->{type} = "backlog";
+		
+		$user->{controller}->tx->send( {json => $_} );
+	};
 };
 
 sub addUser {
@@ -147,9 +195,9 @@ sub addUser {
 		$user->newRandString();
 	};
 	
-	$user->{backlogIndex} = $self->{logCollection}->query( { logTime => 1 } )->sort({ logTime => 1 })->limit(1)->next; ## oh god, the horror
-	
-	print( ">>>>>>>>>> $user->{backlogIndex} \n" );
+	##	This line sets $user->{backlogIndex} to a hash of the most recent message before they entered the room.
+	$user->{backlogIndex} = $self->{logCollection}->query->sort({ logTime => -1 })->limit(1)->next; 
+	##	oh god, the horror
 	
 	$self->{clients}->{$userID} = $user;
 	$self->sendUserList;

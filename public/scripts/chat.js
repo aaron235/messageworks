@@ -121,6 +121,32 @@ ws.onmessage = function ( event ) {
 		case "keepalive":
 			//	do nothing
 		break;
+		case "backlog":
+			//Generate an HSL color from the randstring of this message
+			var colorString = colorStringCalc( JSON.parse( event.data ).rand );
+				
+			//	If the user left their name blank:
+			if ( JSON.parse(event.data).name === "" ) {
+				$( '#chatLog' ).prepend([
+					'<div class="message">',
+						'<span class="rand" '+ 'style="color:' + colorString + ';">' + JSON.parse(event.data).rand + '</span>' +
+						'<span class="name" '+ 'style="color:' + colorString + ';"></span>' +
+						'<span class="text">' + JSON.parse(event.data).text + '</span>' +
+						'<span class="time">' + localTimeString + '</span>',
+					'</div>',
+				].join( "\n" ));
+			//	If the user has a name:
+			} else {
+				$( '#chatLog' ).prepend([
+					'<div class="message">',
+						'<span class="rand" '+ 'style="color:' + colorString + ';">'  + JSON.parse(event.data).rand + '</span>' +
+						'<span class="name" '+ 'style="color:' + colorString + ';">'  + '[' + JSON.parse(event.data).name + ']:&nbsp;' + '</span>' +
+						'<span class="text">' + JSON.parse(event.data).text + '</span>' +
+						'<span class="time">' + localTimeString + '</span>',
+					'</div>',
+				].join( "\n" ));
+			};
+		break;
 		default:
 			//	do nothing
 		break;

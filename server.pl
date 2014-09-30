@@ -210,14 +210,13 @@ websocket '/chat/:roomName/send' => sub {
 				my $hash = $user->signMessage( $hashIn );
 				$hash = $room->prepareMessage( $hash );
 				$room->deliverMessage( $hash );
-				$room->logMessage( $hash );
 			}
 			when ( "name" ) {
 				$user->setName( $hashIn->{name} );
 				$room->sendUserList;
 			} 
 			when ( "backlog" ) {
-				
+				$room->sendBacklog( $user, $hashIn->{amount} );
 			}
 			when ( "keepalive" ) {
 				
