@@ -22,6 +22,7 @@ my $debugMode = 1;
 use Mojolicious::Lite;
 use MongoDB;
 use DateTime;
+use Time::HiRes qw(time);
 
 require 'lib/Users.pm';
 require 'lib/Rooms.pm';
@@ -102,7 +103,6 @@ post '/create' => sub {
 	## $private is a boolean, $requestedURL only exists if private is 0
 	my $private = int( $controller->param( 'private' ) );
 	my $requestedURL = $controller->param( 'roomURLInput' );
-	##Check if the URL is valid; if it's not, redirect back to /new. This is a failsafe in case the JS filter doesn't work.
 	
 	if ((not defined($requestedURL)) || ($requestedURL eq "") || ($private == 1)) {
 		$requestedURL = generateSecureURL();
@@ -197,7 +197,7 @@ websocket '/chat/:roomName/send' => sub {
 	
 	$rooms{$roomName}->addUser($user);
 	
-	$rooms{$roomName}->serverMessage("Client " . $user->{randString} . " has connected.");
+	$rooms{$roomName}->serverMessage("Client " . $user->{rand} . " has connected.");
 	
 	##	set the timeout for each websocket connection to indefinite
 	$user->{controller}->inactivity_timeout( 0 );
@@ -216,9 +216,12 @@ websocket '/chat/:roomName/send' => sub {
 				$user->setName( $hashIn->{name} );
 				$room->sendUserList;
 			} 
+			when ( "backlog" ) {
+				
+			}
 			when ( "keepalive" ) {
 				
-			} 
+			}
 			default {
 				
 			};
@@ -233,7 +236,7 @@ websocket '/chat/:roomName/send' => sub {
 		#Remove the user
 		$rooms{$roomName}->removeUser($user);
 	
-		$room->serverMessage("Client " . $user->{randString} . " has disconnected.");
+		$room->serverMessage("Client " . $user->{rand} . " has disconnected.");
 		
 		## If the room is empty, delete the room.
 		if ( !keys $room->{clients} && $roomName ne "default" ) {

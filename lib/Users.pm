@@ -15,6 +15,7 @@ package Users;
 use Mojolicious::Lite;
 use DateTime;
 use MongoDB;
+use Time::HiRes qw(time);
 
 do 'lib/Parsing.pl';
 
@@ -48,7 +49,7 @@ sub new {
 	);
 	
 	my $self = {
-		randString	=> $randString,
+		rand => $randString,
 		%options,
 	};
 	
@@ -67,14 +68,14 @@ sub signMessage {
 	my $timeString = localtime();
 	
 	my $hashOut = {
-		rand => $self->{randString},
+		rand => $self->{rand},
 		name => $self->{name},
 		text => $hashIn->{text},
 		time => $timeString,
 		type => "user",
 	};
 	
-	app->log->debug( "Users->signMessage: user $self->{randString} has successfully signed their message" );
+	app->log->debug( "Users->signMessage: user $self->{rand} has successfully signed their message" );
 	
 	return $hashOut;
 };
@@ -85,13 +86,13 @@ sub setName {
 	
 	$self->{name} = $name;
 	
-	app->log->debug( "Users->setName: user $self->{randString} has changed their name to $name" );
+	app->log->debug( "Users->setName: user $self->{rand} has changed their name to $name" );
 };
 
 sub newRandString {
 	my $self = shift;
 	
-	my $oldID = $self->{randString};
+	my $oldID = $self->{rand};
 	
 	my @upperConsonants = ( "B", "C", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "X", "Y", "Z" );
 	my @lowerVowels = ( "a", "e", "i", "o", "u" );
@@ -106,9 +107,9 @@ sub newRandString {
 		int( rand( 10 ) )
 	);
 	
-	$self->{randString} = $randString;
+	$self->{rand} = $randString;
 	
-	app->log->debug( "Users->newRandString: user $self->{randString} had their ID changed from $oldID" );
+	app->log->debug( "Users->newRandString: user $self->{rand} had their ID changed from $oldID" );
 };
 
 1;

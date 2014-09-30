@@ -15,6 +15,7 @@ package Rooms;
 use Mojolicious::Lite;
 use MongoDB;
 use DateTime;
+use Time::HiRes qw(time);
 
 do 'lib/Parsing.pl';
 
@@ -86,6 +87,8 @@ sub logMessage {
 		name => $messageHash->{name},
 		text => $messageHash->{text},
 		time => $messageHash->{time},
+		
+		logTime => time(),
 	});
 	
 	app->log->debug( "Rooms->logMessage: message logged in room '$self->{id}' from user '$messageHash->{rand}'" );
@@ -116,9 +119,9 @@ sub sendUserList {
 	
 	for ( values $self->{clients} ) {
 		if ( $_->{name} ) {
-			push( @users, "$_->{randString} [$_->{name}]" );
+			push( @users, "$_->{rand} [$_->{name}]" );
 		} else {
-			push( @users, "$_->{randString}" );
+			push( @users, "$_->{rand}" );
 		};
 	};
 	
@@ -138,27 +141,31 @@ sub addUser {
 	my $self = shift;
 	my $user = shift;
 	
-	my $userID = $user->{randString};
+	my $userID = $user->{rand};
 	
 	while ( $userID ~~ $self->{clients} ) {
 		$user->newRandString();
 	};
 	
+	$user->{backlogIndex} = $self->{logCollection}->query( { logTime => 1 } )->sort({ logTime => 1 })->limit(1)->next; ## oh god, the horror
+	
+	print( ">>>>>>>>>> $user->{backlogIndex} \n" );
+	
 	$self->{clients}->{$userID} = $user;
 	$self->sendUserList;
 	
-	app->log->debug( "Rooms->addUser: user '$user->{randString}' added to room '$self->{id}'" );
+	app->log->debug( "Rooms->addUser: user '$user->{rand}' added to room '$self->{id}'" );
 }; 
 
 sub removeUser {
 	my $self = shift;
 	my $user = shift;
 	
-	my $userID = $user->{randString};
+	my $userID = $user->{rand};
 	delete $self->{clients}->{$userID};
 	$self->sendUserList;
 	
-	app->log->debug( "Rooms->removeUser: user '$user->{randString}' removed from room '$self->{id}'" );
+	app->log->debug( "Rooms->removeUser: user '$user->{rand}' removed from room '$self->{id}'" );
 };
 
 sub remove {
