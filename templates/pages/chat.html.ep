@@ -33,5 +33,12 @@
 			<audio id="notificationTone" preload="auto">
 				<source src="/sounds/new_message.ogg" type="audio/ogg">
  				<source src="/sounds/new_message.mp3" type="audio/mpeg">
-				This browser does not support HTML5 notification tones, sorry.
+			</audio>
+			<audio id="userJoinedTone" preload="auto">
+				<source src="/sounds/user_joined.ogg" type="audio/ogg">
+ 				<source src="/sounds/user_joined.mp3" type="audio/mpeg">
+			</audio>
+			<audio id="userLeftTone" preload="auto">
+				<source src="/sounds/user_left.ogg" type="audio/ogg">
+ 				<source src="/sounds/user_left.mp3" type="audio/mpeg">
 			</audio>
