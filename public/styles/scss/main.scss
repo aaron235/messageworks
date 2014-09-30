@@ -135,7 +135,8 @@ Body Area
 	/*background-color:$lay;
 	Trying a solid-$bg background :) */
 	border:1px solid $lay;
-
+	position:relative;
+	z-index:100;
 	overflow: auto;
 	/*font-family: monospace;*/
 	box-sizing:border-box;
@@ -149,9 +150,10 @@ Body Area
 
 #nameList {
 	position:absolute;
+	top:0px;
 	right:0px;
-	z-index:-1;
 	height:100%;
+	overflow:auto;
 	border:1px solid $lay;
 	border-left:0px;
 	box-sizing:border-box;
