@@ -1,3 +1,6 @@
+/* ******************************
+Initial Websocket Setup
+****************************** */
 //	'ws' is a URL with a handler for all chat messages
 var pathArray = window.location.pathname.split( '/' );
 var ws = new WebSocket( 'ws://' + window.location.host + '/chat/' + pathArray[2] + '/send/' );
@@ -9,6 +12,9 @@ ws.onopen = function() {
 	backlogRequest(128);
 };
 
+/* ******************************
+Window isActive Setup [for notification sounds]
+****************************** */
 //	Starts off as the active window
 var isActive = true;
 
@@ -22,18 +28,52 @@ window.onblur = function () {
   isActive = false; 
 }; 
 
+/* ******************************
+Functions to communicate with the server
+****************************** */
+
+//Normal message sending
+function websockSend(message) {
+	
+	//	If the outgoing message is blank, don't send anything.
+	if ( message == "" ) {
+		return;
+	};
+	
+	//	get a new date
+	var date = new Date();
+	//	send a JSON of name, text, and time (date) to ws
+	ws.send( JSON.stringify({
+		name: $( '#name' ).val(),
+		text: message,
+		time: date.toString(),
+		type: "message",
+	}));
+	// Add the sent message to your message history array so you can access it via arrow keys
+	sentMessages.unshift( $( '#outgoing' ).val() );
+	
+	//	blank the outgoing message field
+	$( '#outgoing' ).val( "" );
+}
+
+//Username change reporting
 function nameUpdate(name) {
 	ws.send( JSON.stringify({
 		type: "name",
 		name: name,
 	}));
 }
+
+//Backlog requesting
 function backlogRequest(amount) {
 	ws.send( JSON.stringify({
 		type: "backlog",
 		amount: amount,
 	}));
 }
+/* ******************************
+Functions to display messages
+****************************** */
 
 //Function to derive the rand & nick hue from the randString
 function hueCalc( randString ) {
@@ -157,32 +197,9 @@ ws.onmessage = function ( event ) {
 	$( '#chatLog' ).scrollTop( $( '#chatLog' )[0].scrollHeight );
 };
 
-function websockSend(message) {
-	
-	//	If the outgoing message is blank, don't send anything.
-	if ( message == "" ) {
-		return;
-	};
-	
-	//	get a new date
-	var date = new Date();
-	//	send a JSON of name, text, and time (date) to ws
-	ws.send( JSON.stringify({
-		name: $( '#name' ).val(),
-		text: message,
-		time: date.toString(),
-		type: "message",
-	}));
-	// Add the sent message to your message history array so you can access it via arrow keys
-	sentMessages.unshift( $( '#outgoing' ).val() );
-	
-	//	blank the outgoing message field
-	$( '#outgoing' ).val( "" );
-}
-
-function getBacklog() {
-	
-}
+/* ******************************
+Message history cycling
+****************************** */
 
 //For up-down picking of previous messages
 var sentMessages = [];
@@ -200,7 +217,11 @@ function changeMessageIndex(increment) {
 		sentMessagesIndex = -1;
 	}
 };
-	
+
+/* ******************************
+Initialization & function assignment
+****************************** */
+
 $( document ).ready(function() {
 	$( '#outgoing' ).keyup( function( e ) {
 		// Process keystrokes in the chat input box

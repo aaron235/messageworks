@@ -21,10 +21,11 @@ do 'lib/Parsing.pl';
 
 ##	This is our connection to mongo
 my $mongoClient = MongoDB::MongoClient->new;
-# This is the one database we're using from that client connection
+## These are the room databases we're using from that connection
 my $roomLogDB = $mongoClient->get_database( 'roomLog' );
 my $roomInfoDB = $mongoClient->get_database( 'roomInfo' );
 
+## Creates a new room object and a corresponding roomInfo entry.
 sub new {
 	my ( $class, %options ) = @_;
 	
@@ -39,6 +40,7 @@ sub new {
 	
 	bless( $self, $class );
 	
+	## Write room info to the roomInfoDB Database
 	$self->{infoCollection}->insert({
 		name    => $self->{id},
 		private => $self->{private},
@@ -49,7 +51,7 @@ sub new {
 	return( $self );
 };
 
-
+## Prepares user message JSON by escaping special chars, adding autolink/embed codes, and adding the user type.
 sub prepareMessage {
 	my $self = shift;
 	my $hashIn = shift;
@@ -67,6 +69,7 @@ sub prepareMessage {
 	return( $hashOut );
 };
 
+## Send a message to all users in the current room object.
 sub deliverMessage {
 	my $self = shift;
 	my $hashOut = shift;
@@ -83,6 +86,7 @@ sub deliverMessage {
 	}
 };
 
+## Record a message in the current room collection in the mongo roomLog database.
 sub logMessage {
 	my $self = shift;
 	my $messageHash = shift;
@@ -115,6 +119,7 @@ sub logMessage {
 	}
 };
 
+## Prepare and deliver a server message.
 sub serverMessage {
 	my $self = shift;
 	my $string = shift;
@@ -137,7 +142,7 @@ sub sendUserList {
 	my $self = shift;
 	
 	my @users;
-	
+	## This needs to be improved
 	for ( values $self->{clients} ) {
 		if ( $_->{name} ) {
 			push( @users, "$_->{rand} [$_->{name}]" );
@@ -179,6 +184,7 @@ sub sendBacklog {
 			$user->{backlogIndex} = $_;
 		};
 		
+		## Add the "backlog" property to sent message JSONs.
 		$_->{backlog} = 1;
 		
 		$user->{controller}->tx->send( {json => $_} );
