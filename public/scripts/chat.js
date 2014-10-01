@@ -9,13 +9,13 @@ ws.onopen = function() {
 	//Send a name packet to the server with the current name.
 	nameUpdate( $( '#name' ).val() );
 	//Send a backlogRequest packet to the server 
-	backlogRequest(128);
+	backlogRequest( 128 );
 };
 
 //	when ws recieves a message, append some html with the contents of the message
 ws.onmessage = function ( event ) {
-	messageJSON = JSON.parse(event.data);
-	printMessage(messageJSON);
+	messageJSON = JSON.parse( event.data );
+	printMessage( messageJSON );
 	//	this makes #chatLog scroll to the bottom after each new message is received.
 	$( '#chatLog' ).scrollTop( $( '#chatLog' )[0].scrollHeight );
 }
@@ -97,14 +97,14 @@ function colorStringCalc( randString ) {
 
 //Function to convert Perl's verbose timestring into simple, user-readable timestamps.
 function timeCalc( timeString ) {
-	var serverTime = new Date(timeString + " GMT");
-	var localTimeString = serverTime.toLocaleTimeString( );
+	var serverTime = new Date( timeString + " GMT" );
+	var localTimeString = serverTime.toLocaleTimeString();
 	return localTimeString;
 }
 
 function formatMessage( messageJSON ) {
 	
-	var localTimeString = timeCalc(messageJSON.time);
+	var localTimeString = timeCalc( messageJSON.time );
 	var messageArray;
 	
 	if ( messageJSON.type == "server" ) {
@@ -143,15 +143,15 @@ function formatMessage( messageJSON ) {
 function printMessage( messageJSON ) {
 	if ( messageJSON.type == "userList" ) {
 			//	Remove all current entries from the user list.
-			$( "#nameList>ul").empty();
+			$( "#nameList>ul" ).empty();
 			//	Split the received JSON into an array of lines. 
 			nameArray = messageJSON.users.split("\n");
 			//	Count the number of lines [number of users] and update the user counter to match
-			$( "#userCounter" ).html(nameArray.length.toString());
+			$( "#userCounter" ).html( nameArray.length.toString() );
 			//	Add each line to the names list as an li
-			for (var i = 0; i < nameArray.length; i++) {
+			for ( var i = 0; i < nameArray.length; i++ ) {
 				var colorString = colorStringCalc(nameArray[i]);
-				$( '#nameList>ul' ).append("<li style='color:" + colorString + "'>" + nameArray[i] + "</li>");
+				$( '#nameList>ul' ).append( "<li style='color:" + colorString + "'>" + nameArray[i] + "</li>" );
 			}
 	} else {
 		var messageHTML = formatMessage( messageJSON );
@@ -163,17 +163,17 @@ function printMessage( messageJSON ) {
 			//Play notification sounds
 			var messageSoundName = "";
 			if (messageJSON.type == "server") {
-				if (/disconnected/.test(messageJSON.text)) {
+				if ( messageJSON.action == "userDisconnect" ) {
 					messageSoundName = "userLeftTone";
-					console.log("userLeftTone");
-				} else if (/connected/.test(messageJSON.text)) {
+					console.log( "userLeftTone" );
+				} else if ( messageJSON.action = "userConnect" ) {
 					messageSoundName = "userJoinedTone";
-					console.log("userJoinedTone");
+					console.log( "userJoinedTone" );
 				}
-			} else if (messageJSON.type == "user") {
+			} else if ( messageJSON.type == "user" ) {
 				messageSoundName = "notificationTone";
 			}
-			if (!isActive && !!$('#notificationSounds').val() ) {
+			if (!isActive && !!$( '#notificationSounds').val() ) {
 				document.getElementById(messageSoundName).play();
 			}
 		}

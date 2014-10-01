@@ -123,6 +123,7 @@ sub logMessage {
 sub serverMessage {
 	my $self = shift;
 	my $string = shift;
+	my $action = shift;
 	
 	my $timeString = localtime();
 	
@@ -131,6 +132,7 @@ sub serverMessage {
 		time => $timeString,
 		text => $string,
 		type => "server",
+		action => $action,
 	};
 	
 	$self->deliverMessage($hashOut);

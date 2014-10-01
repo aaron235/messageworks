@@ -197,7 +197,7 @@ websocket '/chat/:roomName/send' => sub {
 	
 	$rooms{$roomName}->addUser($user);
 	
-	$rooms{$roomName}->serverMessage("Client " . $user->{rand} . " has connected.");
+	$rooms{$roomName}->serverMessage("Client " . $user->{rand} . " has connected.", "userConnect");
 	
 	##	set the timeout for each websocket connection to indefinite
 	$user->{controller}->inactivity_timeout( 0 );
@@ -235,7 +235,7 @@ websocket '/chat/:roomName/send' => sub {
 		#Remove the user
 		$rooms{$roomName}->removeUser($user);
 	
-		$room->serverMessage("Client " . $user->{rand} . " has disconnected.");
+		$room->serverMessage("Client " . $user->{rand} . " has disconnected.", "userDisconnect");
 		
 		## If the room is empty, delete the room.
 		if ( !keys $room->{clients} && $roomName ne "default" ) {
