@@ -12,6 +12,14 @@ ws.onopen = function() {
 	backlogRequest(128);
 };
 
+//	when ws recieves a message, append some html with the contents of the message
+ws.onmessage = function ( event ) {
+	messageJSON = JSON.parse(event.data);
+	printMessage(messageJSON);
+	//	this makes #chatLog scroll to the bottom after each new message is received.
+	$( '#chatLog' ).scrollTop( $( '#chatLog' )[0].scrollHeight );
+}
+
 /* ******************************
 Window isActive Setup [for notification sounds]
 ****************************** */
@@ -87,115 +95,90 @@ function colorStringCalc( randString ) {
 	return 'hsl(' + hueCalc( randString ) + ',60%,40%)';
 }
 
-//	when ws recieves a message, append some html with the contents of the message
-ws.onmessage = function ( event ) {
-	//Date calculation into local time
-	var serverTimeString = JSON.parse(event.data).time + " GMT";
-	var serverTime = new Date(serverTimeString);
+//Function to convert Perl's verbose timestring into simple, user-readable timestamps.
+function timeCalc( timeString ) {
+	var serverTime = new Date(timeString + " GMT");
 	var localTimeString = serverTime.toLocaleTimeString( );
+	return localTimeString;
+}
+
+function formatMessage( messageJSON ) {
 	
+	var localTimeString = timeCalc(messageJSON.time);
+	var messageArray;
 	
-	//	When a message is recieved, check the type of the message, and handle it accordingly
-	switch ( JSON.parse(event.data).type ) {
-		//	Server message format
-		case "server":
-			$( '#chatLog' ).append([
-				'<div class="message">',
-					'<span class="server name">[Server]: </span>' +
-					'<span class="server text">' + JSON.parse(event.data).text + '</span>' ,
-					'<span class="server time">' + localTimeString + '</span>',
-				'</div>',
-			].join( "\n" ));
-			
-			//	Play notification sound
-			if ( !isActive && !!$('#notificationSounds').val() ) {
-				document.getElementById('notificationTone').play();
-			};
-		break;
+	if ( messageJSON.type == "server" ) {
+		messageArray = [
+			'<div class="message">',
+				'<span class="server name">[Server]: </span>' +
+				'<span class="server text">' + messageJSON.text + '</span>' ,
+				'<span class="server time">' + localTimeString + '</span>',
+			'</div>',
+		];
+	} else if ( messageJSON.type == "user" ) {
 		
-		//	User message format
-		case "user":
-			//Generate an HSL color from the randstring of this message
-			var colorString = colorStringCalc( JSON.parse( event.data ).rand );
-				
-			//	If the user left their name blank:
-			if ( JSON.parse(event.data).name === "" ) {
-				$( '#chatLog' ).append([
-					'<div class="message">',
-						'<span class="rand" '+ 'style="color:' + colorString + ';">' + JSON.parse(event.data).rand + '</span>' +
-						'<span class="name" '+ 'style="color:' + colorString + ';"></span>' +
-						'<span class="text">' + JSON.parse(event.data).text + '</span>' +
-						'<span class="time">' + localTimeString + '</span>',
-					'</div>',
-				].join( "\n" ));
-			//	If the user has a name:
-			} else {
-				$( '#chatLog' ).append([
-					'<div class="message">',
-						'<span class="rand" '+ 'style="color:' + colorString + ';">'  + JSON.parse(event.data).rand + '</span>' +
-						'<span class="name" '+ 'style="color:' + colorString + ';">'  + '[' + JSON.parse(event.data).name + ']:&nbsp;' + '</span>' +
-						'<span class="text">' + JSON.parse(event.data).text + '</span>' +
-						'<span class="time">' + localTimeString + '</span>',
-					'</div>',
-				].join( "\n" ));
-			};
+		var colorString = colorStringCalc( messageJSON.rand );
+		var nameSpan;
+		
+		if ( messageJSON.name === "" ) {
+			nameSpan = '<span class="name"></span>';
+		} else {
+			nameSpan = '<span class="name" style="color:' + colorString + ';">[' + messageJSON.name + ']:&nbsp;</span>';
+		}
+		
+		messageArray = [
+			'<div class="message">',
+				'<span class="rand" '+ 'style="color:' + colorString + ';">' + messageJSON.rand + '</span>' +
+				nameSpan +
+				'<span class="text">' + messageJSON.text + '</span>' +
+				'<span class="time">' + localTimeString + '</span>',
+			'</div>',
+		];
+	}
 			
-			//	Play notification sound
-			if ( !isActive && !!$('#notificationSounds').val() ) {
-				document.getElementById('notificationTone').play();
-			};
-		break;
-		case "userList":
+	messageHTML = messageArray.join( "\n" );
+	return messageHTML;
+}
+
+function printMessage( messageJSON ) {
+	if ( messageJSON.type == "userList" ) {
 			//	Remove all current entries from the user list.
 			$( "#nameList>ul").empty();
 			//	Split the received JSON into an array of lines. 
-			nameArray = JSON.parse(event.data).users.split("\n");
+			nameArray = messageJSON.users.split("\n");
 			//	Count the number of lines [number of users] and update the user counter to match
 			$( "#userCounter" ).html(nameArray.length.toString());
 			//	Add each line to the names list as an li
 			for (var i = 0; i < nameArray.length; i++) {
 				var colorString = colorStringCalc(nameArray[i]);
-				$( "#nameList>ul").append("<li style='color:" + colorString + "'>" + nameArray[i] + "</li>");
+				$( '#nameList>ul' ).append("<li style='color:" + colorString + "'>" + nameArray[i] + "</li>");
 			}
-		break;
-		case "keepalive":
-			//	do nothing
-		break;
-		case "backlog":
-			//Generate an HSL color from the randstring of this message
-			var colorString = colorStringCalc( JSON.parse( event.data ).rand );
-				
-			//	If the user left their name blank:
-			if ( JSON.parse(event.data).name === "" ) {
-				$( '#chatLog' ).prepend([
-					'<div class="message">',
-						'<span class="rand" '+ 'style="color:' + colorString + ';">' + JSON.parse(event.data).rand + '</span>' +
-						'<span class="name" '+ 'style="color:' + colorString + ';"></span>' +
-						'<span class="text">' + JSON.parse(event.data).text + '</span>' +
-						'<span class="time">' + localTimeString + '</span>',
-					'</div>',
-				].join( "\n" ));
-			//	If the user has a name:
-			} else {
-				$( '#chatLog' ).prepend([
-					'<div class="message">',
-						'<span class="rand" '+ 'style="color:' + colorString + ';">'  + JSON.parse(event.data).rand + '</span>' +
-						'<span class="name" '+ 'style="color:' + colorString + ';">'  + '[' + JSON.parse(event.data).name + ']:&nbsp;' + '</span>' +
-						'<span class="text">' + JSON.parse(event.data).text + '</span>' +
-						'<span class="time">' + localTimeString + '</span>',
-					'</div>',
-				].join( "\n" ));
-			};
-		break;
-		default:
-			//	do nothing
-		break;
-	};
-	
-	
-	//	this makes #chatLog scroll to the bottom after each new message is received.
-	$( '#chatLog' ).scrollTop( $( '#chatLog' )[0].scrollHeight );
-};
+	} else {
+		var messageHTML = formatMessage( messageJSON );
+		
+		if ( messageJSON.backlog ) {
+			$( '#chatLog' ).prepend( messageHTML );
+		} else {
+			$( '#chatLog' ).append( messageHTML );
+			//Play notification sounds
+			var messageSoundName = "";
+			if (messageJSON.type == "server") {
+				if (/disconnected/.test(messageJSON.text)) {
+					messageSoundName = "userLeftTone";
+					console.log("userLeftTone");
+				} else if (/connected/.test(messageJSON.text)) {
+					messageSoundName = "userJoinedTone";
+					console.log("userJoinedTone");
+				}
+			} else if (messageJSON.type == "user") {
+				messageSoundName = "notificationTone";
+			}
+			if (!isActive && !!$('#notificationSounds').val() ) {
+				document.getElementById(messageSoundName).play();
+			}
+		}
+	}
+}
 
 /* ******************************
 Message history cycling
