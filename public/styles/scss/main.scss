@@ -164,6 +164,12 @@ Body Area
 #nameList ul {
 	list-style-type:none;
 	padding:0px;
+	margin:0px !important;
+}
+
+#nameList ul span {
+	float:right;
+	font-weight:bold;
 }
 
 #versionText {
