@@ -34,29 +34,30 @@ controller and database (to be moved to Rooms.pm).
 
 sub new {
 	my ( $class, %options ) = @_;
-	
+
 	my @upperConsonants = ( "B", "C", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "X", "Y", "Z" );
 	my @lowerVowels = ( "a", "e", "i", "o", "u" );
 	my @lowerConsonants = ( "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z" );
-	
+
 	my $randString = sprintf(
-		$upperConsonants[ int( rand( @upperConsonants ) ) ] . 
-		$lowerVowels[ int( rand( @lowerVowels ) ) ] . 
-		$lowerConsonants[ int( rand( @lowerConsonants ) ) ] . 
-		int( rand( 10 ) ) . 
-		int( rand( 10 ) ) . 
+		$upperConsonants[ int( rand( @upperConsonants ) ) ] .
+		$lowerVowels[ int( rand( @lowerVowels ) ) ] .
+		$lowerConsonants[ int( rand( @lowerConsonants ) ) ] .
+		int( rand( 10 ) ) .
+		int( rand( 10 ) ) .
 		int( rand( 10 ) )
 	);
-	
+
 	my $self = {
 		rand => $randString,
+		joinTime => time;
 		%options,
 	};
-	
+
 	bless( $self, $class );
-	
+
 	app->log->debug( "Users->new: created new user with randString $self->{randString}" );
-	
+
 	return( $self );
 };
 
@@ -64,9 +65,9 @@ sub new {
 sub signMessage {
 	my $self = shift;
 	my $hashIn = shift;
-	
+
 	my $timeString = localtime();
-	
+
 	my $hashOut = {
 		rand => $self->{rand},
 		name => $self->{name},
@@ -74,41 +75,41 @@ sub signMessage {
 		time => $timeString,
 		type => "user",
 	};
-	
+
 	app->log->debug( "Users->signMessage: user $self->{rand} has successfully signed their message" );
-	
+
 	return $hashOut;
 };
 
 sub setName {
 	my $self = shift;
 	my $name = shift;
-	
+
 	$self->{name} = $name;
-	
+
 	app->log->debug( "Users->setName: user $self->{rand} has changed their name to $name" );
 };
 
 sub newRandString {
 	my $self = shift;
-	
+
 	my $oldID = $self->{rand};
-	
+
 	my @upperConsonants = ( "B", "C", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "X", "Y", "Z" );
 	my @lowerVowels = ( "a", "e", "i", "o", "u" );
 	my @lowerConsonants = ( "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z" );
-	
+
 	my $randString = sprintf(
-		$upperConsonants[ int( rand( @upperConsonants ) ) ] . 
-		$lowerVowels[ int( rand( @lowerVowels ) ) ] . 
-		$lowerConsonants[ int( rand( @lowerConsonants ) ) ] . 
-		int( rand( 10 ) ) . 
-		int( rand( 10 ) ) . 
+		$upperConsonants[ int( rand( @upperConsonants ) ) ] .
+		$lowerVowels[ int( rand( @lowerVowels ) ) ] .
+		$lowerConsonants[ int( rand( @lowerConsonants ) ) ] .
+		int( rand( 10 ) ) .
+		int( rand( 10 ) ) .
 		int( rand( 10 ) )
 	);
-	
+
 	$self->{rand} = $randString;
-	
+
 	app->log->debug( "Users->newRandString: user $self->{rand} had their ID changed from $oldID" );
 };
 

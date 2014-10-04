@@ -183,7 +183,6 @@ sub sendBacklog {
 	##	This line sets @messages to a hash of $amount number of messages before the user entered the room
 
 	foreach ( $self->{logCollection}->query( { logTime => { '$lte' => $backlogIndexTime } } )->limit( $amount )->all ) {
-		print( $_ );
 		unshift( @messages, $_ );
 	};
 	##	ugh.

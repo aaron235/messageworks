@@ -156,8 +156,6 @@ function printMessage( messageJSON ) {
 			} else {
 				usersFormatted[i] = "<li style='color:" + colorString + "'>" + users[i].rand + "<b>[" + users[i].name + "]</b>" + "</li>";
 			}
-
-			console.log( i + usersFormatted[i] );
 		}
 
 		for ( i = 0; i < usersFormatted.length; ++i ) {
