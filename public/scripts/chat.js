@@ -151,7 +151,7 @@ function printMessage( messageJSON ) {
 
 		for ( i = 0; i < users.length; ++i ) {
 			var colorString = colorStringCalc( users[i].rand );
-			if ( users[i].name == "" ) {
+			if ( !users[i].name ) {
 				usersFormatted[i] = "<li style='color:" + colorString + "'>" + users[i].rand + "</li>";
 			} else {
 				usersFormatted[i] = "<li style='color:" + colorString + "'>" + users[i].rand + "<b>[" + users[i].name + "]</b>" + "</li>";
