@@ -8,7 +8,7 @@ var ws = new WebSocket( 'ws://' + window.location.host + '/chat/' + pathArray[2]
 ws.onopen = function() {
 	//Send a name packet to the server with the current name.
 	nameUpdate( $( '#name' ).val() );
-	//Send a backlogRequest packet to the server 
+	//Send a backlogRequest packet to the server
 	backlogRequest( 128 );
 };
 
@@ -27,14 +27,14 @@ Window isActive Setup [for notification sounds]
 var isActive = true;
 
 //	Set as active window when focused
-window.onfocus = function () { 
-  isActive = true; 
-}; 
+window.onfocus = function () {
+  isActive = true;
+};
 
 //	Unset as active window when unfocused
-window.onblur = function () { 
-  isActive = false; 
-}; 
+window.onblur = function () {
+  isActive = false;
+};
 
 /* ******************************
 Functions to communicate with the server
@@ -42,12 +42,12 @@ Functions to communicate with the server
 
 //Normal message sending
 function websockSend(message) {
-	
+
 	//	If the outgoing message is blank, don't send anything.
 	if ( message == "" ) {
 		return;
 	};
-	
+
 	//	get a new date
 	var date = new Date();
 	//	send a JSON of name, text, and time (date) to ws
@@ -59,7 +59,7 @@ function websockSend(message) {
 	}));
 	// Add the sent message to your message history array so you can access it via arrow keys
 	sentMessages.unshift( $( '#outgoing' ).val() );
-	
+
 	//	blank the outgoing message field
 	$( '#outgoing' ).val( "" );
 }
@@ -87,8 +87,8 @@ Functions to display messages
 function hueCalc( randString ) {
 	var hueNum = 0;
 	if ( randString ) {
-		hueNum = Math.floor( randString.slice( 3, 6 ) * 359/999 );	
-	} 
+		hueNum = Math.floor( randString.slice( 3, 6 ) * 359/999 );
+	}
 	return hueNum;
 }
 function colorStringCalc( randString ) {
@@ -103,10 +103,10 @@ function timeCalc( timeString ) {
 }
 
 function formatMessage( messageJSON ) {
-	
+
 	var localTimeString = timeCalc( messageJSON.time );
 	var messageArray;
-	
+
 	if ( messageJSON.type == "server" ) {
 		messageArray = [
 			'<div class="message">',
@@ -116,16 +116,16 @@ function formatMessage( messageJSON ) {
 			'</div>',
 		];
 	} else if ( messageJSON.type == "user" ) {
-		
+
 		var colorString = colorStringCalc( messageJSON.rand );
 		var nameSpan;
-		
+
 		if ( messageJSON.name === "" ) {
 			nameSpan = '<span class="name"></span>';
 		} else {
 			nameSpan = '<span class="name" style="color:' + colorString + ';">[' + messageJSON.name + ']:&nbsp;</span>';
 		}
-		
+
 		messageArray = [
 			'<div class="message">',
 				'<span class="rand" '+ 'style="color:' + colorString + ';">' + messageJSON.rand + '</span>' +
@@ -135,27 +135,40 @@ function formatMessage( messageJSON ) {
 			'</div>',
 		];
 	}
-			
+
 	messageHTML = messageArray.join( "\n" );
 	return messageHTML;
 }
 
 function printMessage( messageJSON ) {
 	if ( messageJSON.type == "userList" ) {
-			//	Remove all current entries from the user list.
-			$( "#nameList>ul" ).empty();
-			//	Split the received JSON into an array of lines. 
-			nameArray = messageJSON.users.split("\n");
-			//	Count the number of lines [number of users] and update the user counter to match
-			$( "#userCounter" ).html( nameArray.length.toString() );
-			//	Add each line to the names list as an li
-			for ( var i = 0; i < nameArray.length; i++ ) {
-				var colorString = colorStringCalc(nameArray[i]);
-				$( '#nameList>ul' ).append( "<li style='color:" + colorString + "'>" + nameArray[i] + "</li>" );
+
+		var users = messageJSON.users;
+		var usersFormatted = [];
+		var usersFormattedString = "";
+
+		$( '#userCounter' ).html( users.length );
+
+		for ( i = 0; i < users.length; ++i ) {
+			var colorString = colorStringCalc( users[i].rand );
+			if ( users[i].name == "" ) {
+				usersFormatted[i] = "<li style='color:" + colorString + "'>" + users[i].rand + "</li>";
+			} else {
+				usersFormatted[i] = "<li style='color:" + colorString + "'>" + users[i].rand + "<b>[" + users[i].name + "]</b>" + "</li>";
 			}
+
+			console.log( i + usersFormatted[i] );
+		}
+
+		for ( i = 0; i < usersFormatted.length; ++i ) {
+			usersFormattedString += usersFormatted[i] + "\n";
+		}
+
+		$( '#nameList>ul' ).html( usersFormattedString );
+
 	} else {
 		var messageHTML = formatMessage( messageJSON );
-		
+
 		if ( messageJSON.backlog ) {
 			$( '#chatLog' ).prepend( messageHTML );
 		} else {
@@ -163,12 +176,10 @@ function printMessage( messageJSON ) {
 			//Play notification sounds
 			var messageSoundName = "";
 			if (messageJSON.type == "server") {
-				if ( messageJSON.action == "userDisconnect" ) {
+				if ( messageJSON.event == "userDisconnect" ) {
 					messageSoundName = "userLeftTone";
-					console.log( "userLeftTone" );
-				} else if ( messageJSON.action = "userConnect" ) {
+				} else if ( messageJSON.event = "userConnect" ) {
 					messageSoundName = "userJoinedTone";
-					console.log( "userJoinedTone" );
 				}
 			} else if ( messageJSON.type == "user" ) {
 				messageSoundName = "notificationTone";
@@ -228,8 +239,8 @@ $( document ).ready(function() {
 	});
 	// Show/hide the list of users when you click the users counter.
 	$( '#toggleNameList' ).click(function() {
-		$( "#chatLog" ).toggleClass("chatLogShrunk");
-		$( '#toggleNameList' ).toggleClass("active");
+		$( "#chatLog" ).toggleClass( "chatLogShrunk" );
+		$( '#toggleNameList' ).toggleClass( "active" );
 	});
 	//	Every time #name changes, send a name message to the server so it can update user lists with the new name.
 	$( '#name' ).change( function() {
@@ -238,7 +249,7 @@ $( document ).ready(function() {
 			name: $( '#name' ).val(),
 		}));
 	});
-	
+
 	//	Check if the server is alive every second (all clientside)
 	var serverStatusCheck = setInterval( function() {
 		if ( ws.readyState === undefined || ws.readyState > 1 ) {
@@ -247,7 +258,7 @@ $( document ).ready(function() {
 			clearInterval( keepalivePing );
 		}
 	}, 1000 );
-	
+
 	//	Ping the server to keep your WS alive every 20 seconds
 	var keepalivePing = setInterval( function() {
 		ws.send(JSON.stringify({
@@ -255,3 +266,15 @@ $( document ).ready(function() {
 		}));
 	}, 20000 );
 });
+
+/*
+	General Use Functions
+*/
+
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
