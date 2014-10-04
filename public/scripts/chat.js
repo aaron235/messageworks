@@ -154,7 +154,7 @@ function printMessage( messageJSON ) {
 			if ( !users[i].name ) {
 				usersFormatted[i] = "<li style='color:" + colorString + "'>" + users[i].rand + "</li>";
 			} else {
-				usersFormatted[i] = "<li style='color:" + colorString + "'>" + users[i].rand + "<b>[" + users[i].name + "]</b>" + "</li>";
+				usersFormatted[i] = "<li style='color:" + colorString + "'>" + users[i].rand + "<span>[" + users[i].name + "]</span>" + "</li>";
 			}
 		}
 

@@ -1,2 +1,8 @@
-./db
-./log
+##  database files
+/db/
+
+##  logpath for morbo/mongo
+/log/
+
+##  Files SASS needs for some reason
+/.sass_cache/
