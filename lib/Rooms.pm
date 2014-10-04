@@ -159,6 +159,8 @@ sub sendUserList {
 		type  => "userList",
 	};
 
+	##  $hashOut->{users} = @users does not work because @users is evaluated in scalar context for some dumb reason
+	##  this is why these 3 lines exist
 	for ( my $i = 0; $i < @users; ++$i ) {
 		$hashOut->{users}[$i] = $users[$i];
 	};
