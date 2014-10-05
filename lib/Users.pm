@@ -50,7 +50,7 @@ sub new {
 
 	my $self = {
 		rand => $randString,
-		joinTime => time;
+		joinTime => time,
 		%options,
 	};
 
