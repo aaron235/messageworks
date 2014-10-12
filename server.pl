@@ -75,6 +75,8 @@ get '/' => sub {
 		title => "Home",
 	);
 	$controller->render( 'frame' );
+
+	app->log->debug( "GET request to '/'");
 };
 
 get '/about' => sub {
@@ -85,6 +87,8 @@ get '/about' => sub {
 		title => "About",
 	);
 	$controller->render( 'frame' );
+
+	app->log->debug( "GET request to '/about'" );
 };
 
 get '/new' => sub {
@@ -95,6 +99,8 @@ get '/new' => sub {
 		title => "Create a New Room",
 	);
 	$controller->render( 'frame' );
+
+	app->log->debug( "GET request to '/new'" );
 };
 
 post '/create' => sub {
@@ -147,11 +153,15 @@ post '/create' => sub {
 
 		return $room;
 	};
+
+	app->log->debug( "POST data to '/create'" );
 };
 
 get '/chat/' => sub {
 	my $controller = shift;
 	$controller->redirect_to("/chat/default");
+
+	app->log->debug( "GET request to '/chat', redirected to '/chat/default'" );
 };
 
 get '/chat/:roomName' => sub {
@@ -168,6 +178,8 @@ get '/chat/:roomName' => sub {
 	} else {
 		$controller->redirect_to( '/error/room_not_found' );
 	};
+
+	app->log->debug( "GET request to '/chat/$roomQuery'" );
 };
 
 get '/error/:error' => sub {
@@ -186,6 +198,8 @@ get '/error/:error' => sub {
 	);
 
 	$controller->render( 'frame' );
+
+	app->log->debug( "GET request to '/error/$error'" );
 };
 
 websocket '/chat/:roomName/send' => sub {
