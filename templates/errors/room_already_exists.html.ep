@@ -1,5 +1,5 @@
 <div class="errorPage">
 	<h2>Room Already Exists</h2>
 	<p>The room you requested already exists.</p>
-	<a href="/new">Try making another.</a>
+	<p><a href="/new">Try making another</a>, or <a href="/chat/<%= $name %>">join this one</a>.</p>
 </div>
