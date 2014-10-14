@@ -121,7 +121,8 @@ sub deliverWhisper {
 	$self->{clients}->{$user->{rand}}->{controller}->tx->send( {json => $hashOut} );
 	$self->{clients}->{$hashOut->{rand}}->{controller}->tx->send( {json => $hashOut} );
 
-	$self->logMessage( $hashOut );
+##  Whispers are not logged for the dual reasons of privacy and convenience
+##	$self->logMessage( $hashOut );
 
 	app->log->debug( "Rooms->deliverWhisper: whisper delivered in room '$self->{id}' from user '$hashOut->{rand}' to user '$user->{rand}'" );
 };
