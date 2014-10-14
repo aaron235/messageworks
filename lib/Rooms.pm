@@ -123,7 +123,7 @@ sub deliverWhisper {
 
 	$self->logMessage( $hashOut );
 
-	app->log->debug( "Rooms->deliverMessage: message delivered in room '$self->{id}' from user '$hashOut->{rand}' (TO USER: $user->{rand})" );
+	app->log->debug( "Rooms->deliverWhisper: whisper delivered in room '$self->{id}' from user '$hashOut->{rand}' to user '$user->{rand}'" );
 };
 
 ## Record a message in the current room collection in the mongo roomLog database.
