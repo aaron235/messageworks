@@ -70,6 +70,29 @@ sub prepareMessage {
 	return( $hashOut );
 };
 
+sub handleMessage {
+	my $self = shift;
+	my $hash = shift;
+
+	my $comChar = substr( $hash->{text}, 0, 1 );
+
+	given ( $comChar ) {
+		when ( '@' ) {
+			my $whisperTo = substr( $hash->{text}, 1, 6 );
+
+			if ( $whisperTo ~~ $self->{clients} ) {
+				$self->deliverWhisper( $hash, $self->{clients}->{$whisperTo} );
+			} else {
+				$self->deliverMessage( $hash );
+			}
+		}
+
+		default {
+			$self->deliverMessage( $hash );
+		}
+	}
+};
+
 ## Send a message to all users in the current room object.
 sub deliverMessage {
 	my $self = shift;
@@ -85,6 +108,22 @@ sub deliverMessage {
 	} elsif ( $hashOut->{type} eq "user" ) {
 		app->log->debug( "Rooms->deliverMessage: message delivered in room '$self->{id}' from user '$hashOut->{rand}'" );
 	}
+};
+
+##  Send a message to only some users in the current room
+sub deliverWhisper {
+	my $self = shift;
+	my $hashOut = shift;
+	my $user = shift;
+
+	$hashOut->{whisper} = 1;
+
+	$self->{clients}->{$user->{rand}}->{controller}->tx->send( {json => $hashOut} );
+	$self->{clients}->{$hashOut->{rand}}->{controller}->tx->send( {json => $hashOut} );
+
+	$self->logMessage( $hashOut );
+
+	app->log->debug( "Rooms->deliverMessage: message delivered in room '$self->{id}' from user '$hashOut->{rand}' (TO USER: $user->{rand})" );
 };
 
 ## Record a message in the current room collection in the mongo roomLog database.

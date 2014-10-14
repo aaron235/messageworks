@@ -226,7 +226,7 @@ websocket '/chat/:roomName/send' => sub {
 			when( "message" ) {
 				my $hash = $user->signMessage( $hashIn );
 				$hash = $room->prepareMessage( $hash );
-				$room->deliverMessage( $hash );
+				$room->handleMessage( $hash );
 			}
 			when ( "name" ) {
 				$user->setName( $hashIn->{name} );
