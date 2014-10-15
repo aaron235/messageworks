@@ -119,7 +119,9 @@ sub deliverWhisper {
 	$hashOut->{whisper} = 1;
 
 	$self->{clients}->{$user->{rand}}->{controller}->tx->send( {json => $hashOut} );
-	$self->{clients}->{$hashOut->{rand}}->{controller}->tx->send( {json => $hashOut} );
+	if ( $hashOut->{rand} eq $user-{rand} ) {
+		$self->{clients}->{$hashOut->{rand}}->{controller}->tx->send( {json => $hashOut} );
+	};
 
 ##  Whispers are not logged for the dual reasons of privacy and convenience
 ##	$self->logMessage( $hashOut );
