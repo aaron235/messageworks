@@ -128,7 +128,7 @@ function formatMessage( messageJSON ) {
 
 		messageArray = [
 			'<div class="message">',
-				'<span class="rand" '+ 'style="color:' + colorString + ';">' + messageJSON.rand + '</span>' +
+				'<span class="rand" style="color:' + colorString + ';">' + messageJSON.rand + '</span>' +
 				nameSpan +
 				'<span class="text">' + messageJSON.text + '</span>' +
 				'<span class="time">' + localTimeString + '</span>',
@@ -154,7 +154,7 @@ function printMessage( messageJSON ) {
 			if ( !users[i].name ) {
 				usersFormatted[i] = "<li style='color:" + colorString + "'>" + users[i].rand + "</li>";
 			} else {
-				usersFormatted[i] = "<li style='color:" + colorString + "'>" + users[i].rand + "<span>[" + users[i].name + "]</span>" + "</li>";
+				usersFormatted[i] = "<li style='color:" + colorString + "'>" + users[i].rand + "<span class='name'>[" + users[i].name + "]</span>" + "</li>";
 			}
 		}
 
@@ -173,7 +173,7 @@ function printMessage( messageJSON ) {
 			$( '#chatLog' ).append( messageHTML );
 			//Play notification sounds
 			var messageSoundName = "";
-			if (messageJSON.type == "server") {
+			if ( messageJSON.type == "server" ) {
 				if ( messageJSON.event == "userDisconnect" ) {
 					messageSoundName = "userLeftTone";
 				} else if ( messageJSON.event = "userConnect" ) {
@@ -182,8 +182,8 @@ function printMessage( messageJSON ) {
 			} else if ( messageJSON.type == "user" ) {
 				messageSoundName = "notificationTone";
 			}
-			if (!isActive && !!$( '#notificationSounds').val() ) {
-				document.getElementById(messageSoundName).play();
+			if (!isActive && !!$( '#notificationSounds').val( ) ) {
+				document.getElementById(messageSoundName).play( );
 			}
 		}
 	}
@@ -199,8 +199,8 @@ var messageInProgress = [];
 var sentMessagesIndex = -1;
 
 //Function to cycle through message history
-function changeMessageIndex(increment) {
-	sentMessages[sentMessagesIndex] = $( '#outgoing' ).val();
+function changeMessageIndex( increment ) {
+	sentMessages[sentMessagesIndex] = $( '#outgoing' ).val( );
 	sentMessagesIndex += increment;
 	if (sentMessagesIndex >= (sentMessages.length-1)) {
 		sentMessagesIndex = sentMessages.length-1;
@@ -214,23 +214,39 @@ function changeMessageIndex(increment) {
 Initialization & function assignment
 ****************************** */
 
-$( document ).ready(function() {
+$( document ).ready( function( ) {
+
+	$( '#chatLog' ).on( "click", '.rand', function( ) {
+		var thisName = $( this ).html( );
+
+		var comChar = $( '#outgoing' ).val( ).substr( 0, 1 );
+
+		if ( $( '#outgoing' ).val( ) == "" ) {
+			$( '#outgoing' ).val( '@' + thisName );
+		} else {
+			if ( comChar != '@' ) {
+				var message = $( '#outgoing' ).val( );
+				$( '#outgoing' ).val( '@' + thisName + message );
+			}
+		}
+	});
+
 	$( '#outgoing' ).keyup( function( e ) {
 		// Process keystrokes in the chat input box
 		switch (e.which) {
 			//If it's an enter keystroke, send the message and return to the default message index.
 			case 13:
-				websockSend( $( '#outgoing' ).val() );
+				websockSend( $( '#outgoing' ).val( ) );
 				sentMessagesIndex = -1;
 				break;
 			// If it's an up keystroke, try to increase the message index, and show the corresponding message in the chat box.
 			case 38:
-				changeMessageIndex(1);
+				changeMessageIndex( 1 );
 				$( '#outgoing' ).val( sentMessages[sentMessagesIndex] );
 				break;
 			// If it's a down keystroke, try to decrease the message index, and show the corresponding message in the chat box.
 			case 40:
-				changeMessageIndex(-1);
+				changeMessageIndex( -1 );
 				$( '#outgoing' ).val( sentMessages[sentMessagesIndex] );
 				break;
 		}
@@ -266,7 +282,7 @@ $( document ).ready(function() {
 });
 
 /*
-	General Use Functions
+*	General Use Functions
 */
 
 Object.size = function(obj) {
