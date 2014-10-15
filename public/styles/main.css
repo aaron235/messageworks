@@ -146,7 +146,7 @@ Body Area
   padding: 0px;
   margin: 0px !important; }
 
-#nameList ul span {
+#nameList ul .name {
   float: right;
   font-weight: bold; }
 
@@ -256,7 +256,7 @@ input {
 #sendBar input {
   width: 100%;
   height: 100%;
-  margin-right: 128px;
+  padding-right: 192px;
   background: #f3f3f3;
   border: 1px solid #cccccc;
   padding-left: 1em;

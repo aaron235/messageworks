@@ -26,7 +26,7 @@
 				</div>
 			</div>
 			<div id="sendBar">
-				<input id="outgoing" placeholder="Beep Boop." maxlength="256" tabindex="2" type="text" />
+				<input id="outgoing" placeholder="Beep Boop." maxlength="1024" tabindex="2" type="text" />
 				<button id="sendButton" alt="Send Message" onclick="websockSend(document.getElementById('outgoing').value)">Send</button>
 			</div>
 			

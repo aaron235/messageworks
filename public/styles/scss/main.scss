@@ -3,7 +3,6 @@
 @import 'colors';
 @import 'fonts';
 
-
 /* *************
 General Formatting
 ************* */
@@ -167,7 +166,10 @@ Body Area
 	margin:0px !important;
 }
 
-#nameList ul span {
+#nameList ul .rand {
+}
+
+#nameList ul .name {
 	float:right;
 	font-weight:bold;
 }
@@ -295,7 +297,7 @@ input {
 #sendBar input {
 	width:100%;
 	height:100%;
-	margin-right:128px;
+	padding-right:192px;
 	background:$lay;
 	border:1px solid $layB;
 	padding-left:1em;

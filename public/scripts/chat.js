@@ -91,6 +91,7 @@ function hueCalc( randString ) {
 	}
 	return hueNum;
 }
+//Function to generate a HSL string from a randstring, saturation, and lightness.
 function colorStringCalc( randString, saturation, lightness ) {
 	return 'hsl(' + hueCalc( randString ) + ',' + saturation + '%,' + lightness +  '%)';
 }
@@ -116,9 +117,10 @@ function formatMessage( messageJSON ) {
 			'</div>',
 		];
 	} else if ( messageJSON.type == "user" ) {
-
+		
+		
 		var colorString = colorStringCalc( messageJSON.rand, 70, 40 );
-		var colorStringBorder = colorStringCalc( messageJSON.rand, 60, 60 );
+		var colorStringWhisperBorder = colorStringCalc( messageJSON.rand, 60, 80 );
 		var colorStringWhisper = colorStringCalc( messageJSON.rand, 60, 90 );
 		var nameSpan;
 
@@ -130,7 +132,7 @@ function formatMessage( messageJSON ) {
 
 		var wrapperHead = '<div class="message">';
 		if ( messageJSON.whisper ) {
-			wrapperHead = '<div class="message whisper" style="background-color: ' + colorStringWhisper + '; border-color: ' + colorStringBorder + ';">';
+			wrapperHead = '<div class="message whisper" style="background-color: ' + colorStringWhisper + '; border-color: ' + colorStringWhisperBorder + ';">';
 		}
 		messageArray = [
 			wrapperHead,
@@ -158,9 +160,9 @@ function printMessage( messageJSON ) {
 		for ( i = 0; i < users.length; ++i ) {
 			var colorString = colorStringCalc( users[i].rand, 70, 40 );
 			if ( !users[i].name ) {
-				usersFormatted[i] = "<li style='color:" + colorString + "'>" + users[i].rand + "</li>";
+				usersFormatted[i] = "<li><span class='rand' style='color:" + colorString + "'>" + users[i].rand + "</span></li>";
 			} else {
-				usersFormatted[i] = "<li style='color:" + colorString + "'>" + users[i].rand + "<span class='name'>[" + users[i].name + "]</span>" + "</li>";
+				usersFormatted[i] = "<li><span class='rand' style='color:" + colorString + "'>" + users[i].rand + "</span><span class='name' style='color:" + colorString + "'>[" + users[i].name + "]</span>" + "</li>";
 			}
 		}
 
@@ -222,7 +224,7 @@ Initialization & function assignment
 
 $( document ).ready( function( ) {
 
-	$( '#chatLog' ).on( "click", '.rand', function( ) {
+	$( '#chatWrap' ).on( "click", '.rand', function( ) {
 		var thisName = $( this ).html( );
 
 		var comChar = $( '#outgoing' ).val( ).substr( 0, 1 );
@@ -235,6 +237,7 @@ $( document ).ready( function( ) {
 				$( '#outgoing' ).val( '@' + thisName + " " + message );
 			}
 		}
+		$( '#outgoing' ).focus();
 	});
 
 	$( '#outgoing' ).keyup( function( e ) {
