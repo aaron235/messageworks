@@ -119,7 +119,7 @@ sub deliverWhisper {
 	$hashOut->{whisper} = 1;
 
 	$self->{clients}->{$user->{rand}}->{controller}->tx->send( {json => $hashOut} );
-	if ( $hashOut->{rand} eq $user-{rand} ) {
+	unless ( $hashOut->{rand} eq $user-{rand} ) {
 		$self->{clients}->{$hashOut->{rand}}->{controller}->tx->send( {json => $hashOut} );
 	};
 
