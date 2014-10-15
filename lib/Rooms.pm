@@ -118,9 +118,11 @@ sub deliverWhisper {
 
 	$hashOut->{whisper} = 1;
 
-	$self->{clients}->{$user->{rand}}->{controller}->tx->send( {json => $hashOut} );
-	unless ( $hashOut->{rand} eq $user-{rand} ) {
-		$self->{clients}->{$hashOut->{rand}}->{controller}->tx->send( {json => $hashOut} );
+	##Send the message to the intended recipient
+	$self->{clients}->{$hashOut->{rand}}->{controller}->tx->send( {json => $hashOut} );
+	unless ( $hashOut->{rand} eq $user->{rand} ) {
+		##Unless the person who sent it is the person on the address, send it to the person who sent it
+		$self->{clients}->{$user->{rand}}->{controller}->tx->send( {json => $hashOut} );
 	};
 
 ##  Whispers are not logged for the dual reasons of privacy and convenience
