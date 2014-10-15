@@ -91,8 +91,8 @@ function hueCalc( randString ) {
 	}
 	return hueNum;
 }
-function colorStringCalc( randString ) {
-	return 'hsl(' + hueCalc( randString ) + ',60%,40%)';
+function colorStringCalc( randString, saturation, lightness ) {
+	return 'hsl(' + hueCalc( randString ) + ',' + saturation + '%,' + lightness +  '%)';
 }
 
 //Function to convert Perl's verbose timestring into simple, user-readable timestamps.
@@ -117,7 +117,9 @@ function formatMessage( messageJSON ) {
 		];
 	} else if ( messageJSON.type == "user" ) {
 
-		var colorString = colorStringCalc( messageJSON.rand );
+		var colorString = colorStringCalc( messageJSON.rand, 70, 40 );
+		var colorStringBorder = colorStringCalc( messageJSON.rand, 60, 60 );
+		var colorStringWhisper = colorStringCalc( messageJSON.rand, 60, 90 );
 		var nameSpan;
 
 		if ( messageJSON.name === "" ) {
@@ -126,8 +128,12 @@ function formatMessage( messageJSON ) {
 			nameSpan = '<span class="name" style="color:' + colorString + ';">[' + messageJSON.name + ']:&nbsp;</span>';
 		}
 
+		var wrapperHead = '<div class="message">';
+		if ( messageJSON.whisper ) {
+			wrapperHead = '<div class="message whisper" style="background-color: ' + colorStringWhisper + '; border-color: ' + colorStringBorder + ';">';
+		}
 		messageArray = [
-			'<div class="message">',
+			wrapperHead,
 				'<span class="rand" style="color:' + colorString + ';">' + messageJSON.rand + '</span>' +
 				nameSpan +
 				'<span class="text">' + messageJSON.text + '</span>' +
@@ -150,7 +156,7 @@ function printMessage( messageJSON ) {
 		$( '#userCounter' ).html( users.length );
 
 		for ( i = 0; i < users.length; ++i ) {
-			var colorString = colorStringCalc( users[i].rand );
+			var colorString = colorStringCalc( users[i].rand, 70, 40 );
 			if ( !users[i].name ) {
 				usersFormatted[i] = "<li style='color:" + colorString + "'>" + users[i].rand + "</li>";
 			} else {
@@ -222,11 +228,11 @@ $( document ).ready( function( ) {
 		var comChar = $( '#outgoing' ).val( ).substr( 0, 1 );
 
 		if ( $( '#outgoing' ).val( ) == "" ) {
-			$( '#outgoing' ).val( '@' + thisName );
+			$( '#outgoing' ).val( '@' + thisName + " " );
 		} else {
 			if ( comChar != '@' ) {
 				var message = $( '#outgoing' ).val( );
-				$( '#outgoing' ).val( '@' + thisName + message );
+				$( '#outgoing' ).val( '@' + thisName + " " + message );
 			}
 		}
 	});
